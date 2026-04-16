@@ -1,197 +1,116 @@
 <p align="center">
-  <img src="assets/banner.svg" alt="AI Legal Assistant for Claude Code" width="900"/>
+  <img src="assets/banner.svg" alt="AI 法律助手 (中国本地化版)" width="900"/>
 </p>
 
 <p align="center">
-  <strong>AI-powered contract review and legal document generation.</strong> Review contracts, flag risks,<br/>
-  generate NDAs, check compliance, negotiate terms, and produce client-ready PDF reports — all from Claude Code.
-</p>
-
-<p align="center">
-  Every contract has hidden risks. This tool finds them in 60 seconds.
+  <strong>基于 AI 的合同审查与法律文档生成工具 (中国本地化版)</strong><br/>
+  审查合同、识别风险、生成保密协议、检查合规性、生成谈判建议并产出专业的 PDF 报告 —— 全部在 Claude Code 终端内完成。
 </p>
 
 ---
 
-## Why This Matters
+> **分支说明**：本项目 Fork 自 [zubair-trabzada/ai-legal-claude](https://github.com/zubair-trabzada/ai-legal-claude)，并针对 **中华人民共和国法律体系**（民法典、个保法、劳动合同法等）及中文环境（字体支持、语言包）进行了深度本地化改进。
 
-| Metric | Value |
+---
+
+## 为什么这很重要
+
+| 指标 | 价值 |
 |--------|-------|
-| Average legal review cost | $300–$500/hour |
-| Basic contract review | $1,500–$3,000 |
-| Freelancers who don't read contracts | 82% |
-| Cost of one bad clause | $10,000+ |
-| Small businesses without legal review | 67% |
-| Time to review with this tool | Under 60 seconds |
+| 律师合同审查平均成本 | 800–2000元/小时 |
+| 基础合同审查项目 | 3,000–10,000元 |
+| 82% 的自由职业者 | 签署合同时不仔细阅读条款 |
+| 一个“坑”条款的潜在代价 | 100,000元+ |
+| 本工具完成审查的时间 | 少于 60 秒 |
 
 ---
 
-## Quick Start
+## 快速开始
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/zubair-trabzada/ai-legal-claude/main/install.sh | bash
+# 建议克隆本仓库到本地
+git clone https://github.com/wangjizhu/ai-legal-claude.git
+cd ai-legal-claude
+# 切换到本地化分支
+git checkout china-localization
+# 运行安装脚本
+./install.sh
 ```
 
-That's it. One command installs all 14 skills, 5 agents, and the PDF generation scripts.
+就这样。一个命令即可安装所有 14 个技能、5 个 AI 代理以及 PDF 生成脚本。
 
 ---
 
-## All 14 Commands
+## 全部 14 个命令
 
-### Contract Analysis
-| Command | What It Does |
+### 合同分析 (Contract Analysis)
+| 命令 | 功能描述 |
 |---------|-------------|
-| `/legal review <file>` | **Flagship** — Full contract review with 5 parallel agents. Returns a Contract Safety Score, clause-by-clause analysis, and prioritized recommendations. |
-| `/legal risks <file>` | Deep risk analysis with severity scoring for every clause. Estimates financial exposure. |
-| `/legal compare <file1> <file2>` | Side-by-side comparison of two contract versions. Flags additions, removals, and dangerous changes. |
-| `/legal plain <file>` | Translates every clause from legalese into plain English anyone can understand. |
-| `/legal negotiate <file>` | Generates specific counter-proposals with replacement language for every unfavorable clause. |
-| `/legal missing <file>` | Finds protections that SHOULD be in the contract but aren't. |
+| `/legal review <file>` | **旗舰功能** — 调用 5 个并行代理进行全方位合同审查。返回安全评分、逐条风险解析和优先级建议。 |
+| `/legal risks <file>` | 深度风险分析，基于《民法典》对每项条款进行严重程度评分，并估算财务风险敞口。 |
+| `/legal compare <f1> <f2>` | 合同版本精细比对，标记新增、删除以及危险的修改点。 |
+| `/legal plain <file>` | 将晦涩的法律术语（黑话）翻译成任何人都能听懂的“大白话”。 |
+| `/legal negotiate <file>` | 为不利条款生成具体的谈判反提议（Counter-proposals）及替代文案。 |
+| `/legal missing <file>` | 识别合同中应有但缺失的保护性条款（如竞业补偿、违约金上限）。 |
 
-### Document Generation
-| Command | What It Does |
+### 文档生成 (Document Generation)
+| 命令 | 功能描述 |
 |---------|-------------|
-| `/legal nda <description>` | Generates a custom NDA — mutual, one-way, employee, or vendor. |
-| `/legal terms <url>` | Generates terms of service based on what the website actually does. GDPR/CCPA compliant. |
-| `/legal privacy <url>` | Generates a privacy policy by scanning what data the site collects. |
-| `/legal agreement <type>` | Generates business agreements — freelancer contracts, partnerships, SOWs, MSAs, and more. |
-| `/legal freelancer <file>` | Specialized review from the freelancer's perspective. Flags common contractor traps. |
+| `/legal nda <desc>` | 生成定制化的保密协议 —— 包含单方、双方、雇员或供应商版本。 |
+| `/legal terms <url>` | 根据网站实际业务生成服务条款 (ToS)，符合国内监管要求。 |
+| `/legal privacy <url>` | 扫描网站数据收集情况，生成符合《个人信息保护法》(PIPL) 的隐私政策。 |
+| `/legal agreement <type>` | 生成各类商业协议 —— 自由职业、合伙、SOW、MSA 等。 |
+| `/legal freelancer <file>` | 专门针对自由职业者/承包商的审查视角，识别常见的“用工陷阱”。 |
 
-### Compliance & Reporting
-| Command | What It Does |
+### 合规与报告 (Compliance & Reporting)
+| 命令 | 功能描述 |
 |---------|-------------|
-| `/legal compliance <url>` | Compliance gap analysis — GDPR, CCPA, ADA, PCI-DSS, CAN-SPAM, SOC 2. |
-| `/legal report-pdf` | Professional PDF report with score gauges, risk charts, and prioritized actions. |
+| `/legal compliance <url>` | 合规性缺口分析 —— 重点检查 PIPL、民法典格式条款、ICP 备案等。 |
+| `/legal report-pdf` | 生成专业的 PDF 报告，包含风险仪表盘、分值图表及优先级行动清单。 |
 
 ---
 
-## The Flagship: `/legal review`
+## 本地化特性 (China Localization)
 
-The most powerful command. Run it on any contract and get:
+*   **法律依据适配**：核心代理（Agents）已针对中国《民法典》、《个人信息保护法 (PIPL)》、《劳动合同法》及相关司法解释进行了调优。
+    *   *违约金风险*：自动识别超过实际损失 30% 的过高违约金风险。
+    *   *竞业限制*：自动检查是否约定了法定的经济补偿金。
+    *   *数据合规*：强化了对敏感个人信息“单独同意”的合规性检查。
+*   **PDF 中文支持**：解决了原有 ReportLab 库在生成中文 PDF 时的乱码问题。脚本会自动识别系统中的 `SimHei` (黑体) 或 `SimSun` (宋体) 进行渲染。
+*   **全中文化输出**：所有的分析报告、建议和交互提示均已翻译为专业、地道的中文法律用语。
 
-1. **Contract Safety Score** (0-100) with letter grade
-2. **Risk Dashboard** — high/medium/low risk clause counts
-3. **Clause-by-Clause Analysis** — every clause scored, explained in plain English, with specific fix recommendations
-4. **Missing Protections** — what should be there but isn't
-5. **Obligations Timeline** — every deadline and consequence mapped
-6. **Compliance Flags** — regulatory issues flagged
-7. **Negotiation Priorities** — ranked list of what to change first
-8. **Next Steps** — actionable checklist
+---
 
-### How It Works
+## 旗舰功能：`/legal review`
 
-```
-/legal review my-contract.pdf
-```
+运行后，5 个 AI 代理将并行启动：
 
-5 AI agents launch in parallel:
-
-| Agent | Role | Weight |
+| 代理名称 | 职责角色 | 权重 |
 |-------|------|--------|
-| Clause Analyst | Identifies and categorizes every clause | 20% |
-| Risk Assessor | Scores each clause for risk | 25% |
-| Compliance Checker | Flags regulatory issues | 20% |
-| Terms Mapper | Maps obligations, deadlines, and triggers | 15% |
-| Recommendations Engine | Generates specific fixes | 20% |
-
-Results are aggregated into a unified report with a single Contract Safety Score.
+| 条款分析代理 | 识别并分类每一个合同条款 | 20% |
+| 风险评估代理 | 基于中国法标准为每个条款的风险评分 | 25% |
+| 合规性检查代理 | 标记违反 PIPL 或民法典强制性规定的项 | 20% |
+| 期限/义务代理 | 映射所有的职责、截止日期和违约触发点 | 15% |
+| 建议引擎代理 | 针对每个问题生成具体的修改方案 | 20% |
 
 ---
 
-## Use Cases
+## 环境要求
 
-### For Freelancers & Agencies
-- Review client contracts before signing
-- Generate NDAs for new client engagements
-- Create statements of work with proper protections
-- Offer contract review as a paid service ($500-$1,500 per review)
-
-### For Small Businesses
-- Review vendor and supplier contracts
-- Generate privacy policies and terms of service
-- Run compliance audits on your website
-- Understand what you're actually agreeing to
-
-### For AI Automation Agencies
-- Add contract review to your service offering
-- Generate professional PDF reports for clients
-- Offer monthly legal document management retainers
-- Pair with the AI Marketing Suite and AI Sales Team
+- **Claude Code** (需配置有效的 Anthropic API Key)
+- **Python 3.8+** (仅用于生成 PDF 报告)
+- **reportlab** — `pip3 install reportlab` (仅用于生成 PDF 报告)
+- **中文字体**：确保系统安装有 `SimHei.ttf` 或 `SimSun.ttc`（Windows 默认自带）。
 
 ---
 
-## Project Structure
+## 免责声明
 
-```
-ai-legal-claude/
-├── legal/
-│   └── SKILL.md                    # Main orchestrator (command router)
-├── skills/
-│   ├── legal-review/SKILL.md       # Full contract review (5 agents)
-│   ├── legal-risks/SKILL.md        # Deep risk analysis
-│   ├── legal-compare/SKILL.md      # Contract comparison
-│   ├── legal-plain/SKILL.md        # Plain English translation
-│   ├── legal-negotiate/SKILL.md    # Counter-proposal generator
-│   ├── legal-missing/SKILL.md      # Missing protections finder
-│   ├── legal-nda/SKILL.md          # NDA generator
-│   ├── legal-terms/SKILL.md        # Terms of service generator
-│   ├── legal-privacy/SKILL.md      # Privacy policy generator
-│   ├── legal-agreement/SKILL.md    # Business agreement generator
-│   ├── legal-compliance/SKILL.md   # Compliance gap analysis
-│   ├── legal-freelancer/SKILL.md   # Freelancer contract review
-│   └── legal-report-pdf/SKILL.md   # PDF report generator
-├── agents/
-│   ├── legal-clauses.md            # Clause analysis agent
-│   ├── legal-risks.md              # Risk assessment agent
-│   ├── legal-compliance.md         # Compliance check agent
-│   ├── legal-terms.md              # Terms & obligations agent
-│   └── legal-recommendations.md    # Recommendations agent
-├── scripts/
-│   └── generate_legal_pdf.py       # PDF generation (ReportLab)
-├── templates/
-│   └── contract-review-template.md # Report template
-├── install.sh                      # One-line installer
-├── uninstall.sh                    # Clean uninstaller
-└── README.md
-```
-
----
-
-## Requirements
-
-- **Claude Code** (with an active Anthropic API key)
-- **Python 3.8+** (for PDF generation only)
-- **reportlab** — `pip3 install reportlab` (for PDF generation only)
-
----
-
-## Uninstall
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/zubair-trabzada/ai-legal-claude/main/uninstall.sh | bash
-```
-
-Or run locally:
-
-```bash
-./uninstall.sh
-```
-
----
-
-## Disclaimer
-
-This tool is for educational and informational purposes only. It does **not** provide legal advice and should **not** be used as a substitute for consultation with a licensed attorney. Always have a qualified lawyer review any contract before signing.
+本工具仅用于教育和信息参考目的，**不提供**任何形式的正式法律意见。本工具生成的分析结果不应被视为律师咨询的替代品。在签署任何合同或依赖生成的法律文件之前，请务必咨询在中国执业的专业律师。
 
 ---
 
 <p align="center">
-  <strong>Part of the Claude Code Skills Series</strong><br>
-  <a href="https://github.com/zubair-trabzada/ai-marketing-claude">AI Marketing Suite</a> ·
-  <a href="https://github.com/zubair-trabzada/ai-sales-team-claude">AI Sales Team</a> ·
-  <strong>AI Legal Assistant</strong>
-</p>
-
-<p align="center">
-  <a href="https://www.skool.com/aiworkshop">🎓 Learn How to Sell Claude Code Services to Real Businesses</a>
+  <strong>Claude Code 技能系列的一部分</strong><br>
+  <strong>AI 法律助手 (中国本地化版)</strong>
 </p>
