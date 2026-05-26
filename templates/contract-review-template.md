@@ -1,190 +1,228 @@
-# Contract Review Report
+# 合同审查报告
 
-> ⚠️ LEGAL DISCLAIMER: This analysis is AI-generated and does not constitute legal advice. Always consult a licensed attorney before signing.
+> ⚠️ **法律免责声明（AI 辅助审查，非正式法律意见）**
+>
+> 本报告由 AI 生成，**不得直接用作正式法律意见，也不得不加审核地纳入律师意见书、尽调报告或对外文件**。
+>
+> 律师采用前必须：① 核对每一条法律引用（条文存在性、现行有效性、是否被司法解释修正）；② 结合个案事实判断；③ 署名前承担二次审核责任。
+>
+> 非律师用户：在签署合同前请咨询执业律师。
 
 ---
 
-## Contract Safety Score: [SCORE]/100 — Grade: [LETTER] ([LABEL])
+## 合同安全评分: [SCORE]/100 — 评级: [LETTER] ([LABEL])
 
 <!--
-Scoring Guide:
-  90-100 = A+ (Safe)       — Low risk, standard favorable terms
-  80-89  = A  (Good)       — Minor issues, generally favorable
-  70-79  = B  (Fair)       — Some concerning clauses need attention
-  60-69  = C  (Caution)    — Multiple risky clauses, negotiate before signing
-  40-59  = D  (Risky)      — Significant risks, strong negotiation needed
-  0-39   = F  (Dangerous)  — Do not sign without major revisions
+评分指引（律师意见书风险用语对齐）：
+  90-100 = A+ (无异议)            — 风险极低，条款标准且对委托方有利
+  80-89  = A  (轻微关注事项)      — 少量需关注但不影响整体可签性
+  70-79  = B  (一般法律风险)      — 存在需关注的条款，建议谈判调整
+  60-69  = C  (重大法律风险)      — 多处不利条款，需在签署前完成谈判
+  40-59  = D  (重大不利法律风险)  — 显著风险，强烈建议谈判或不签
+  0-39   = F  (不建议签署)        — 含合同无效/严重不公条款，需重大修改后才可考虑签署
 -->
 
 ---
 
-## Executive Summary
+## 执行摘要 (Executive Summary)
 
-<!-- Write 3-4 sentences covering: what type of contract this is, the overall risk posture, the most significant finding, and the top-level recommendation (sign as-is, negotiate, or do not sign). -->
+<!-- 3-4 句话覆盖：合同类型、法律关系定性、整体风险姿态、最严重的单一风险、顶层建议（按现状签 / 谈判后签 / 不建议签）。 -->
 
-[This is a [contract type] between [Party A] and [Party B] governing [brief description of the relationship]. The contract scores [score]/100, indicating [interpretation of score]. The most significant concern is [top risk]. We recommend [signing with minor changes / negotiating key terms before signing / not signing without major revisions].]
-
----
-
-## Contract Details
-
-| Field | Value |
-|-------|-------|
-| **Contract Type** | [e.g., Service Agreement, Freelancer Contract, NDA, SaaS License, Employment] |
-| **Parties** | [Party A full legal name] ↔ [Party B full legal name] |
-| **Effective Date** | [YYYY-MM-DD or "Not specified"] |
-| **Term** | [e.g., "12 months with auto-renewal" or "Project-based, estimated 3 months"] |
-| **Total Value** | [e.g., "$50,000" or "$150/hour, estimated $30,000" or "N/A"] |
-| **Governing Law** | [e.g., "State of Delaware" or "Not specified"] |
+[本合同为 [合同类型]（法律关系定性：[劳动关系/劳务关系/承揽合同/商事合作合同/股权交易/其他]）的协议，签订主体为 [甲方全称] 与 [乙方全称]，约定 [简要业务背景]。合同评分 [score]/100，整体属 [评级解读]。最严重的风险为 [顶级风险]，依据 [《XX法》第X条 — "条文摘录"]。建议 [按现状签 / 谈判调整后签 / 不建议签]。]
 
 ---
 
-## Risk Dashboard
+## 合同基本信息
 
-| Risk Level | Count | Clauses |
-|------------|-------|---------|
-| 🔴 High Risk | [number] | [Comma-separated list of clause names, e.g., "Indemnification, IP Assignment, Non-Compete"] |
-| 🟡 Medium Risk | [number] | [Comma-separated list of clause names, e.g., "Limitation of Liability, Termination, Confidentiality"] |
-| 🟢 Low Risk | [number] | [Comma-separated list of clause names, e.g., "Force Majeure, Notices, Severability"] |
-
----
-
-## Clause-by-Clause Analysis
-
-### 🔴 HIGH RISK CLAUSES
-
-<!-- Repeat this block for EACH high-risk clause found in the contract. -->
-
-#### [Clause Name] — Section [X.X]
-
-- **What it says:** [Plain English summary of what this clause means. No legal jargon. Write as if explaining to someone with no legal background. Example: "If either side breaks the contract, you have to pay for all their legal costs, even if they were partially at fault."]
-
-- **Why it's risky:** [Specific explanation of the danger. Quantify where possible. Example: "This is one-sided indemnification — you bear all legal costs even if the client contributed to the problem. In a typical dispute, legal fees alone can run $20,000-$100,000+."]
-
-- **What you could lose:** [Concrete impact — dollars, rights, opportunities. Example: "$50,000+ in potential legal fees if a dispute arises, plus you waive the right to countersue for their contribution to any damages."]
-
-- **Recommended change:** [Specific alternative language to propose. Example: "Replace with mutual indemnification: 'Each Party shall indemnify the other for claims arising from that Party's breach of this Agreement, negligence, or willful misconduct.' Also add a liability cap tied to fees paid."]
+| 字段 | 值 |
+|------|-----|
+| **合同类型** | [如：技术服务合同、承揽合同、股权转让协议、保密协议、劳动合同、SaaS 服务协议] |
+| **法律关系定性** | [劳动关系 / 劳务关系 / 承揽合同 / 商事合作合同 / 股权交易 / 其他] |
+| **双方主体** | [甲方全称（含统一社会信用代码）] ↔ [乙方全称（含统一社会信用代码）] |
+| **生效日期** | [YYYY-MM-DD 或 "未约定"] |
+| **合同期限** | [如："自 X 至 Y 共 12 个月，期满自动续期 6 个月" 或 "项目制，预计 3 个月"] |
+| **合同金额** | [如："人民币 50 万元" 或 "150 元/小时，预估 30 万元" 或 "无明确金额"] |
+| **管辖与争议解决** | [如："约定甲方所在地法院管辖" 或 "提交 CIETAC 仲裁" 或 "未约定（默认《民事诉讼法》法定管辖）"] |
+| **签署方式** | [盖章+法定代表人签字 / 仅盖章 / 仅法定代表人签字 / 电子签名 / 个人手写签名] |
 
 ---
 
-<!-- Add more high-risk clauses using the same format above. -->
+## 风险仪表盘
 
-### 🟡 MEDIUM RISK CLAUSES
-
-<!-- Repeat this block for EACH medium-risk clause. Same format as high risk. -->
-
-#### [Clause Name] — Section [X.X]
-
-- **What it says:** [Plain English summary]
-
-- **Why it's risky:** [Specific explanation]
-
-- **What you could lose:** [Concrete impact]
-
-- **Recommended change:** [Specific alternative language]
+| 风险级别 | 数量 | 涉及条款 |
+|---------|------|---------|
+| 🔴 重大法律风险 / 重大不利法律风险 | [n] | [条款名清单，逗号分隔。如："违约金条款、知识产权归属、竞业限制"] |
+| 🟡 一般法律风险 | [n] | [条款名清单] |
+| 🟢 无异议 / 轻微关注事项 | [n] | [条款名清单] |
 
 ---
 
-### 🟢 LOW RISK / STANDARD CLAUSES
+## 合同效力筛查（强制性规定二分法）
 
-<!-- Brief summary of clauses that are acceptable. No need for the full 4-field format. -->
+<!-- A2：在条款分析之前，先做整体效力筛查。 -->
 
-- **[Clause Name] (Section [X.X]):** [One-sentence summary confirming this is standard and acceptable. Example: "Standard force majeure clause covering natural disasters, pandemics, and government actions. No concerns."]
-
-- **[Clause Name] (Section [X.X]):** [One-sentence summary]
-
-- **[Clause Name] (Section [X.X]):** [One-sentence summary]
-
----
-
-## Missing Protections
-
-<!-- List clauses or provisions that SHOULD be in this type of contract but are NOT present. Each item should explain what's missing and why it matters. -->
-
-| # | Missing Protection | Why It Matters | Risk Level |
-|---|-------------------|----------------|------------|
-| 1 | [e.g., "Limitation of Liability Clause"] | [e.g., "Without a liability cap, you could be liable for unlimited damages far exceeding the contract value."] | 🔴 High |
-| 2 | [e.g., "Data Protection / Privacy Clause"] | [e.g., "If personal data is exchanged, both parties need defined obligations for handling, storing, and breach notification."] | 🟡 Medium |
-| 3 | [e.g., "Force Majeure Clause"] | [e.g., "Without this, failure to perform due to unforeseeable events (pandemic, natural disaster) could be treated as a breach."] | 🟡 Medium |
-| 4 | [e.g., "Dispute Resolution Mechanism"] | [e.g., "Without a defined process (mediation, arbitration), any disagreement goes straight to expensive litigation."] | 🟡 Medium |
-| 5 | [e.g., "Insurance Requirements"] | [e.g., "No requirement for professional liability insurance, leaving both parties exposed if work product causes harm."] | 🟢 Low |
+| 维度 | 结论 | 法律依据 |
+|------|------|---------|
+| **主体适格** | [合法 / 存疑 / 不适格] | 《民法典》第 143 条 — "民事法律行为有效条件" |
+| **意思真实** | [真实 / 存疑] | 《民法典》第 143、147–151 条 |
+| **不违反效力性强制性规定** | [是 / 存疑：具体说明] | 《民法典》第 153 条 + 最高法《合同编通则解释》第 16-18 条 |
+| **不违背公序良俗** | [是 / 存疑：具体说明] | 《民法典》第 153 条第 2 款 |
+| **整体效力结论** | [合同有效 / 部分无效（注明条款）/ 可撤销 / 全部无效 / 效力待定] | — |
 
 ---
 
-## Obligations & Deadlines
+## 条款逐项分析
 
-<!-- Map out every time-bound obligation in the contract. Include who is responsible, when it must happen, and what the consequence is for missing it. -->
+### 🔴 重大法律风险条款
 
-| Obligation | Responsible Party | Deadline | Consequence of Missing |
-|------------|-------------------|----------|----------------------|
-| [e.g., "Deliver initial project scope"] | [e.g., "Party A (Provider)"] | [e.g., "Within 14 days of effective date"] | [e.g., "Client may terminate for cause under Section 5.2"] |
-| [e.g., "Submit first milestone payment"] | [e.g., "Party B (Client)"] | [e.g., "Net-30 from invoice date"] | [e.g., "1.5% monthly late fee per Section 4.3"] |
-| [e.g., "Provide feedback on deliverables"] | [e.g., "Party B (Client)"] | [e.g., "Within 10 business days of delivery"] | [e.g., "Deemed accepted per Section 3.4"] |
-| [e.g., "Return confidential materials"] | [e.g., "Both Parties"] | [e.g., "Within 30 days of termination"] | [e.g., "Breach of confidentiality, injunctive relief available per Section 6.5"] |
-| [e.g., "Termination notice"] | [e.g., "Either Party"] | [e.g., "30 days written notice"] | [e.g., "Automatic renewal for additional 12-month term per Section 3.1"] |
+<!-- 对每一条重大风险条款，重复以下结构。 -->
 
----
+#### [条款名称] — 第 [X.X] 条
 
-## Compliance Flags
+- **条款原文**：[摘录合同原文，30-100 字]
 
-<!-- Note any regulatory, legal, or jurisdictional concerns. These are issues beyond the contract text itself — external legal factors that affect enforceability or risk. -->
+- **通俗解释**：[用大白话写一句，让非法律人读懂。例："如果一方违约，另一方就算自己也有错，仍然要由违约方承担全部律师费和损失。"]
 
-- **[Flag Title]:** [Description. Example: "Non-compete clause may be unenforceable in California (Cal. Bus. & Prof. Code Section 16600). If either party is based in CA, this clause is likely void."]
+- **风险点**：[具体说明法律风险。例："属于显著加重乙方责任的格式条款，违反对等原则；且未约定责任上限，乙方可能承担远超合同金额的赔偿。"]
 
-- **[Flag Title]:** [Description. Example: "Contract involves processing EU personal data but contains no GDPR-compliant Data Processing Agreement. A DPA addendum is required under GDPR Article 28."]
+- **效力影响**：[合同无效 / 部分无效 / 可撤销 / 有效但有行政处罚风险 / 无影响]
 
-- **[Flag Title]:** [Description. Example: "Governing law is set to Delaware, but both parties are in Texas. This may create unnecessary complexity and expense in dispute resolution."]
+- **法律依据**：[必填，统一格式]
+  - 《民法典》第 497 条第 2 项 — "提供格式条款一方不合理地免除或者减轻其责任、加重对方责任、限制对方主要权利的，该条款无效"
+  - 最高人民法院《关于适用〈中华人民共和国民法典〉合同编通则若干问题的解释》第 9 条 — [条文摘录]
 
----
+- **潜在经济敞口**：[量化金额]
+  - 单次诉讼律师费：人民币 [X-Y] 元
+  - 赔偿金：[金额或"上不封顶（除可由法院依《民法典》584 条限制为可预见损失）"]
+  - 行政处罚（如适用）：人民币 [X-Y] 元
 
-## Negotiation Priorities
-
-<!-- Ranked list of the most important changes to negotiate, from most critical to least. Each should include the specific change to request. -->
-
-1. **[Most Important Change]** — [What to ask for. Example: "Add mutual indemnification and cap total liability at 1x fees paid under the contract. Proposed language: 'In no event shall either Party's total aggregate liability exceed the total fees paid or payable under this Agreement in the twelve (12) months preceding the claim.'"]
-
-2. **[Second Most Important]** — [What to ask for. Example: "Narrow the non-compete from 24 months nationwide to 12 months within a 50-mile radius of the client's primary office, covering only direct competitors in the same market segment."]
-
-3. **[Third Most Important]** — [What to ask for. Example: "Change payment terms from Net-60 to Net-30, with 1.5% monthly interest on late payments. Add a clause: 'IP rights shall not transfer until all outstanding invoices are paid in full.'"]
-
-4. **[Fourth Change]** — [What to ask for]
-
-5. **[Fifth Change]** — [What to ask for]
-
-<!-- Continue as needed. Most reviews will have 3-7 negotiation priorities. -->
+- **建议修改方案**：[给出可直接采用的替代文本，且与 legal-recommendations 代理"标准保护性条款模板"对齐。例："替换为：'双方各自因违约给对方造成损失的，赔偿额度以本合同总价款的 100% 为上限，但因故意或重大过失造成的损失除外。'"]
 
 ---
 
-## Recommended Next Steps
+<!-- 继续列出其他重大风险条款。 -->
 
-<!-- Actionable checklist. Include specific actions, not vague advice. -->
+### 🟡 一般法律风险条款
 
-1. [ ] [e.g., "Send negotiation requests for the 5 priorities listed above to [Client/Other Party]"]
-2. [ ] [e.g., "Request a revised draft addressing the high-risk clauses in Sections 7.1, 9.2, and 12.4"]
-3. [ ] [e.g., "Add the missing Limitation of Liability clause before signing"]
-4. [ ] [e.g., "Clarify the scope of work in Section 2.1 — current language is too vague"]
-5. [ ] [e.g., "Verify the governing law jurisdiction is appropriate for both parties"]
-6. [ ] [e.g., "Set calendar reminder for [date] — auto-renewal termination notice deadline"]
-7. [ ] Consult a licensed attorney before signing
+<!-- 同样结构。 -->
+
+#### [条款名称] — 第 [X.X] 条
+
+- **条款原文**：[摘录]
+- **通俗解释**：[一句话]
+- **风险点**：[说明]
+- **效力影响**：[5 选 1]
+- **法律依据**：《XX法》第X条第X款 — "[条文原文摘录]"
+- **潜在经济敞口**：[量化]
+- **建议修改方案**：[替代文本]
+
+---
+
+### 🟢 无异议 / 轻微关注事项
+
+<!-- 简要列出标准条款。不需要完整 4 字段。 -->
+
+- **[条款名]（第 X.X 条）**：[一句话确认条款标准且可接受。例："标准不可抗力条款，覆盖自然灾害、疫情、政府行为，符合《民法典》第 590 条要求。"]
+
+- **[条款名]（第 X.X 条）**：[一句话]
+
+---
+
+## 缺失保护性条款
+
+<!-- 列出"本类合同应当有但本合同未约定"的条款。 -->
+
+| # | 缺失条款 | 必要性说明 | 法律依据 | 风险级别 |
+|---|---------|-----------|---------|---------|
+| 1 | [如："责任限额条款"] | [说明：例"未约定上限可能承担远超合同金额的赔偿"] | 《民法典》第 584 条（可预见性规则）作为缺省，但缺省不利于乙方 | 🔴 重大 |
+| 2 | [如："送达地址确认条款"] | [说明：例"未约定送达地址，诉讼时对方可主张文书未有效送达，影响判决效力"] | 《民事诉讼法》（2023 修）第 87-92 条 | 🟡 一般 |
+| 3 | [如："情势变更 / 不可抗力具体处理"] | [说明] | 《民法典》第 533、590 条 + 《合同编通则解释》第 32 条 | 🟡 一般 |
+| 4 | [如："个人信息处理条款（PIPL 合规）"] | [说明] | 《个人信息保护法》第 13-17、51 条 | 🔴 重大 |
+| 5 | [如："违约金双向对等条款"] | [说明] | 《民法典》第 585 条 + 公平原则 | 🟡 一般 |
+
+---
+
+## 义务与期限
+
+<!-- 列出全部时间敏感义务、责任主体、期限、违反后果。 -->
+
+| 义务 | 责任方 | 期限 | 违反后果 | 法律依据 |
+|------|--------|------|---------|---------|
+| [如："交付初步项目方案"] | [甲方 / 乙方] | [如："自生效日起 14 日内"] | [如："对方可依第 5.2 条解除合同"] | [合同条款 / 法定来源] |
+| [如："首期款项支付"] | [甲方] | [如："发票日起 30 日内"] | [如："按 1.5% 月利率支付逾期利息"] | 第 4.3 条 + 《民法典》第 676 条 |
+| [如："对交付物提出验收意见"] | [甲方] | [如："交付后 10 个工作日"] | [如："视为验收合格（第 3.4 条）"] | 第 3.4 条 + 《民法典》第 781 条 |
+| [如："归还保密资料"] | [双方] | [如："解除/终止后 30 日内"] | [如："构成保密义务违反，可申请行为保全"] | 第 6.5 条 + 《反不正当竞争法》第 9 条 |
+| [如："解除通知"] | [任一方] | [如："提前 30 日书面通知"] | [如："否则自动续期 12 个月（第 3.1 条）"] | 第 3.1 条 |
+
+---
+
+## 合规标记（中国法专项）
+
+<!-- 列出超越合同文本的外部法律 / 监管问题，附必填法律依据。 -->
+
+- **[标记标题]**：[说明。例："本合同涉及处理个人信息但未约定单独同意机制，违反《个人信息保护法》第 14、29 条。处理量超 100 万人时还需指定个人信息保护负责人（第 52 条），存在最高 5000 万元或上年度营业额 5% 的行政处罚敞口（第 66 条）。"]
+
+- **[标记标题]**：[说明。例："合同约定向境外提供个人信息，但未签订《个人信息出境标准合同》、未通过安全评估、未取得保护认证，违反《个人信息保护法》第 38 条 + 国家网信办《促进和规范数据跨境流动规定》（2024.3 施行）。"]
+
+- **[标记标题]**：[说明。例："约定 'CIETAC 仲裁 或 北京法院管辖'，违反《仲裁法》第 16 条 '或裁或诉'条款无效规则，仲裁条款无效，争议将回归《民事诉讼法》法定管辖。"]
+
+---
+
+## 谈判优先级
+
+<!-- 按重要性排序，1 = 最关键。每条给出具体要求 + 可直接发给对方的修改文本。 -->
+
+1. **[最重要的修改]** — [要求 + 文本。例："增加双向责任限额：'任何一方在本合同项下的累计赔偿责任不超过乙方实际收到的服务费总额，但因故意或重大过失造成的损失、第三方知识产权侵权、违反保密义务及违反法律强制性规定的情形除外。'"]
+
+2. **[第二重要]** — [要求 + 文本]
+
+3. **[第三重要]** — [要求 + 文本]
+
+4. **[第四]** — [要求 + 文本]
+
+5. **[第五]** — [要求 + 文本]
+
+<!-- 通常 3-7 项。 -->
+
+---
+
+## 推荐后续步骤
+
+<!-- 可执行清单。具体行动，不要空泛。 -->
+
+1. [ ] [如："就以上 5 项谈判优先级与对方沟通，争取在签署前完成调整"]
+2. [ ] [如："要求对方提供修订稿，针对第 7.1、9.2、12.4 条的重大风险给出回应"]
+3. [ ] [如："在签署前补充缺失的责任限额条款与送达地址确认条款"]
+4. [ ] [如："明确第 2.1 条服务范围 — 当前表述过于模糊，可能导致履行争议"]
+5. [ ] [如："核实管辖约定的合理性 — 双方均在境内的，宜约定中国法院管辖"]
+6. [ ] [如："设置日历提醒：[日期] — 自动续期前的解除通知截止日"]
+7. [ ] **签署前由执业律师二次核对本报告所有法律引用与建议条款**
 
 ---
 
 <!--
-TEMPLATE USAGE NOTES:
+模板使用说明：
 
-1. Replace all [bracketed placeholders] with actual values from the analysis.
-2. Remove any sections that are not applicable to the contract type.
-3. Add additional clauses to the Clause-by-Clause Analysis as needed.
-4. The Risk Dashboard counts should match the actual clauses listed.
-5. Negotiation Priorities should reference specific section numbers from the contract.
-6. Missing Protections should be tailored to the contract type:
-   - Service Agreements: SLA, warranty, acceptance criteria
-   - Employment: severance, equity vesting, benefits
-   - NDAs: exclusions, duration, permitted disclosures
-   - SaaS: uptime SLA, data portability, exit assistance
-   - Freelancer: kill fee, revision limits, portfolio rights
-7. All risk levels (🔴🟡🟢) should be assigned consistently:
-   - 🔴 High: Could cause significant financial loss, legal liability, or loss of rights
-   - 🟡 Medium: Could cause moderate disadvantage or create ambiguity
-   - 🟢 Low: Minor issue or standard clause with small improvement possible
+1. 将所有 [方括号占位符] 替换为分析得出的实际内容。
+2. 不适用的小节可删除（如承揽合同不需要"PIPL 合规"）。
+3. 条款逐项分析可按需扩展。
+4. 风险仪表盘的数量必须与下方列出的条款一致。
+5. 谈判优先级必须引用合同中具体的条款编号。
+6. 缺失保护性条款需根据合同类型定制：
+   - 技术开发/服务合同：验收标准、知识产权归属、保密、责任限额、不可抗力
+   - 劳动合同：试用期合法性、竞业补偿、社保、加班费、解除条件
+   - 股权交易：对赌效力、回购条款、优先权、知情权、违反陈述与保证的责任
+   - 承揽合同：交付标准、瑕疵担保、所有权与风险转移、随时解除权（《民法典》787 条）
+   - SaaS 服务：SLA 可用性、数据可携性、退出协助、PIPL 合规
+   - NDA：保密期限、例外情形、违约金、商业秘密三要件
+7. 风险级别 🔴🟡🟢 必须与律师意见书四档术语对齐：
+   - 🔴 重大法律风险 / 重大不利法律风险：合同无效/部分无效/可撤销，或可能造成重大经济损失、丧失实质权利
+   - 🟡 一般法律风险 / 轻微关注事项：增加履行成本或导致条款模糊
+   - 🟢 无异议：标准条款，无需调整
+
+法条引用统一格式（A5 硬约束）：
+- 必填：《XX法》第X条第X款 — "[条文原文摘录 30 字内]"
+- 司法解释：[完整名称] 第X条
+- 禁止引用"行动方案、规划、办法（除非是部门规章）、通知、意见"等政策性文件作为法律依据
+- 未确认条文存在或现行有效的，禁止输出
 -->

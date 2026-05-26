@@ -172,7 +172,7 @@ NOW, THEREFORE, in consideration of the mutual covenants contained herein, the P
 
 4.4. **Expenses.** [Reimbursable expenses terms, or "Each Party shall bear its own expenses unless otherwise agreed in writing."]
 
-4.5. **Taxes.** Each Party is responsible for its own taxes. [For contractor agreements: "[Party A] acknowledges they are responsible for all self-employment taxes and will receive an IRS Form 1099."]
+4.5. **税款与发票。** 各方负责自身税费。承揽合同约定："承揽人自行承担个人所得税及社保缴纳义务，并向定作人开具合规增值税发票（普通/专用）。约定承担自付税款不影响税务机关依法认定双方未如实履行代扣代缴义务的能力。"
 
 ---
 
@@ -324,12 +324,13 @@ Date: ________________________________________
 
 Insert these into the appropriate sections of the universal structure above.
 
-#### Freelancer Contract — Additional Clauses
-- **IP Ownership (Section 5):** Work-for-hire clause with explicit assignment. Include portfolio usage rights for the freelancer. State whether source files are included.
-- **Contractor Status (new Section):** Explicit independent contractor acknowledgment. List factors: own tools, own schedule, no benefits, multiple clients permitted. Include IRS Form 1099 reference.
-- **Kill Fee (Section 3.4):** If client terminates before completion, freelancer receives [25-50%] of remaining project value.
-- **Revisions (Section 2):** Include revision limits — typically [2-3] rounds included, additional revisions at [hourly rate].
-- **Scope Creep Protection (Section 2.3):** Change order process for out-of-scope requests with written approval and revised pricing.
+#### 承揽 / 自由职业者合同 — 增补条款（中国法）
+- **知识产权归属（第 5 条）**：基于《著作权法》第 19 条委托作品规则，**明确约定**作品著作权归属（默认归受托人，必须约定才能归委托方）。承揽人可保留作品集展示权。约定是否包含源文件交付。
+- **法律关系定性（新增章节）**：明确"双方为承揽 / 商事合作关系，**非劳动关系**"。列举支持因素：自带工具、自定工作时间、无社保、可同时服务其他客户、按成果计酬。约定承揽人自行承担个税及社保。
+- **任意解除补偿（第 3.4 条）**：基于《民法典》第 787 条，定作人享任意解除权，但解除应赔偿承揽人因此遭受的损失（建议约定为已完成工作量对应费用 + 剩余项目价值的 [25-50%]）。
+- **修订次数（第 2 条）**：约定修订上限——通常 [2-3] 轮，超出按 [小时费率] 另收费。
+- **范围蔓延保护（第 2.3 条）**：范围外需求走变更签证程序，须书面确认并调整价格。
+- **印花税承担**：按《印花税法》各自缴纳（建议明确约定）。
 
 #### Partnership Agreement — Additional Clauses
 - **Capital Contributions (new Section):** Each partner's initial and ongoing contributions.

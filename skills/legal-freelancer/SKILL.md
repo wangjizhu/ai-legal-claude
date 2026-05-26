@@ -1,448 +1,514 @@
-# Freelancer Contract Review
+---
+name: 承揽合同审查
+description: "从承揽人/服务提供方视角审查合同，识别中国法下常见陷阱，区分劳动关系与承揽关系，输出审查报告与谈判清单"
+command: /legal freelancer <file>
+---
 
-You are the freelancer contract review specialist for `/legal freelancer <file>`. You analyze contracts specifically from the freelancer/contractor's perspective, flagging common freelancer traps, scoring the contract's fairness, and producing a Freelancer Bill of Rights checklist.
+# 承揽 / 服务合同专项审查（承揽人视角）
 
-## When This Skill Is Invoked
+你是 `/legal freelancer <file>` 的专项审查工具。你从**承揽人/独立服务提供方**的角度分析合同，识别中国合同实践中常见的对承揽人不利的陷阱，给出合同公平度评分，并产出一份"承揽人权利清单"。
 
-The user runs `/legal freelancer <file>` where `<file>` is a contract file path, URL, or pasted text. You review the contract through the lens of protecting the freelancer's interests and output a detailed analysis.
+**关键前置概念——本技能首要任务**：在中国法律体系下，必须区分以下三种关系，并据此适用**完全不同**的法律规则：
+
+| 关系类型 | 适用法律 | 关键标志 | 关键后果 |
+|---------|---------|---------|---------|
+| **劳动关系** | 《劳动法》《劳动合同法》 | 用人单位规章制度约束、固定工资、办公场所与工具由单位提供、工作时间被支配、社保由单位缴纳 | 一方为"劳动者"，享有最低工资、社保、加班费、解除补偿等强制性保护 |
+| **劳务关系** | 《民法典》合同编（无名合同，参照承揽） | 个人提供单次/短期劳务，无组织从属性 | 不享受劳动法保护，按合同约定追究违约责任；用工方可能因雇员致害担责 |
+| **承揽 / 服务合同关系** | 《民法典》合同编承揽章（770-787 条），或独立有名合同 | 完成特定工作成果交付；承揽人独立组织生产、自负盈亏；按成果付酬 | 适用合同法一般原则，《劳动法》不适用；竞业限制无 2 年上限和必须补偿的强制性要求 |
+
+**严重错误警示**：本项目早期生成的样本（如 `合同审查报告-软件开发协议-2026-04-16.md`）曾错误地将**承揽合同的竞业条款**按《劳动合同法》第 23 条分析（要求"未给经济补偿即无效"）。此类错误必须杜绝——必须**先做关系定性，再选择适用法律**。
 
 ---
 
-## Phase 1: Contract Ingestion
+## 第一阶段：合同接入
 
-### 1.1 Read the Contract
+### 1.1 读取合同
 
-Accept the contract from one of these sources:
-- **File path** — Use the Read tool to read the file
-- **Pasted text** — Accept text pasted directly into the chat
-- **URL** — Use WebFetch to retrieve the document
+从以下来源之一获取合同内容：
+- **文件路径** — 使用 Read 工具读取
+- **粘贴文本** — 接收用户直接粘贴的内容
+- **URL** — 使用 WebFetch 获取
 
-Store the full contract text for analysis.
+存储全文供分析。
 
-**If the contract is unreadable:**
-1. Report the error to the user
-2. Ask for an alternative format
-3. Do NOT proceed without contract text
+**如果合同无法读取：**
+1. 报告错误
+2. 请求替代格式
+3. 在无文本的情况下**不要**继续
 
-### 1.2 Identify the Parties
+### 1.2 识别当事人
 
-Determine:
-- Who is the **hiring party** (client/company)?
-- Who is the **freelancer/contractor**?
-- Which side is the user likely on? (Assume freelancer unless stated otherwise)
+确定：
+- 谁是**发包方 / 委托方 / 客户**？
+- 谁是**承揽人 / 服务提供方**？
+- 用户站在哪一方？（默认承揽人方，除非明确说明）
 
 ---
 
-## Phase 2: Freelancer-Specific Analysis
+## 第二阶段：法律关系定性（核心前置步骤）
 
-Analyze every clause through these 14 critical lenses. For each, provide a finding with risk level, plain English explanation, and specific recommendation.
+**这是本技能最关键的一步。错误的关系定性会导致后续整个法律分析失效。**
 
-### 2.1 Contractor Misclassification Risk (IRS 20-Factor Test)
+按下表评估关系定性：
 
-Evaluate the contract for signals that the relationship may actually be employment, not independent contracting. The IRS and DOL use behavioral control, financial control, and relationship type to determine classification.
-
-**Check for these misclassification red flags:**
-
-| Factor | Red Flag (Employee Signal) | Green Flag (Contractor Signal) | Found? |
+| 因素 | 劳动关系信号 | 承揽关系信号 | 实际情况 |
 |--------|---------------------------|-------------------------------|--------|
-| **Work schedule** | Client dictates hours/schedule | Freelancer sets own hours | |
-| **Work location** | Must work at client's office | Works from own location | |
-| **Tools/equipment** | Client provides all tools | Freelancer uses own tools | |
-| **Training** | Client provides training | Freelancer has own methods | |
-| **Exclusivity** | Cannot work for others | Free to take other clients | |
-| **Integration** | Work is core to client's business | Work is supplementary/project-based | |
-| **Payment method** | Regular salary/wages | Per-project or milestone payments | |
-| **Benefits** | Offered benefits, PTO, insurance | No benefits provided | |
-| **Termination** | Can be fired at will | Only terminated per contract terms | |
-| **Duration** | Indefinite/ongoing | Defined project or term | |
+| **工作方式** | 受发包方规章制度约束 | 独立决定工作方式 | |
+| **工作时间** | 发包方支配上下班时间 | 自主安排时间 | |
+| **工作场所** | 必须在发包方办公场所 | 自有场所或不固定 | |
+| **工具设备** | 发包方提供所有工具 | 承揽人自有工具 | |
+| **组织从属** | 接受发包方人事管理 | 独立从事经营 | |
+| **服务对象** | 实质上只为发包方一家服务 | 自由承接其他客户业务 | |
+| **付酬方式** | 按月固定工资 | 按项目 / 里程碑 / 工作量付费 | |
+| **福利保障** | 享有社保、年休假、公积金 | 无福利待遇 | |
+| **服务期限** | 持续不定期 | 项目期或固定期 | |
+| **风险承担** | 工作风险由发包方承担 | 承揽人自负盈亏 | |
+| **缴税方式** | 工资薪金所得（个税预扣） | 劳务报酬或经营所得（开发票） | |
 
-**Risk Scoring:**
-- 🔴 High Risk (7+ red flags): Strong misclassification risk. Freelancer may be entitled to employee benefits; client faces IRS penalties.
-- 🟡 Medium Risk (4-6 red flags): Some concerning signals. Recommend restructuring certain terms.
-- 🟢 Low Risk (0-3 red flags): Relationship appears properly structured as independent contractor.
+**关系定性结论**：
+- 🔴 **倾向认定为劳动关系**（7+ 项劳动信号）：尽管合同名称叫"承揽"或"服务"，但实质可能被认定为劳动关系。一旦认定，发包方面临：补缴社保、支付加班费、违法解除赔偿金等责任。
+- 🟡 **存在混淆风险**（4-6 项劳动信号）：建议梳理实质用工方式，调整使其更符合承揽关系特征。
+- 🟢 **清晰的承揽关系**（0-3 项劳动信号）：可按承揽合同法律框架分析。
 
-### 2.2 IP Ownership Analysis
+**输出明确判断**：本合同审查依据 [劳动关系 / 劳务关系 / 承揽合同关系] 的法律框架。
 
-This is typically the MOST important section for freelancers.
+---
 
-**Evaluate:**
-- Is this a **work-for-hire** assignment? (Under copyright law, only 9 categories qualify as work-for-hire for independent contractors)
-- Does the contract include an **IP assignment** clause? If so, what exactly is assigned?
-- Is the assignment **blanket** (everything created) or **scoped** (only final deliverables)?
-- Does the freelancer **retain any rights**? (Portfolio usage, derivative works, pre-existing IP)
-- Is there a **license-back** for pre-existing tools, frameworks, or methodologies?
-- Are **source files** included or excluded from the transfer?
-- Is IP transfer **conditional on full payment**? (It should be — IP should not transfer until the freelancer is paid)
+## 第三阶段：承揽人视角的核心审查（14 项）
 
-**Risk Flags:**
-- 🔴 "All work product, including preliminary drafts, concepts, and unused ideas, shall be the exclusive property of Client" — This is overly broad
-- 🔴 "Contractor assigns all IP including pre-existing IP" — Pre-existing IP should NEVER be assigned
-- 🔴 IP transfers before final payment
-- 🟡 Work-for-hire claim for work that does not qualify under copyright law
-- 🟢 IP transfers only upon full payment, freelancer retains portfolio rights and pre-existing IP
+按以下 14 个维度逐条分析。对每项给出风险等级（🔴/🟡/🟢）、通俗解释、具体建议。
 
-### 2.3 Payment Terms Analysis
+### 3.1 关系混淆风险（已在第二阶段评估）
 
-| Check | What to Look For | Risk Level if Missing/Bad |
+承上文。若被定性为事实劳动关系，承揽人可主张：
+- 补缴社保（《社会保险法》第 86 条）
+- 支付加班费（《劳动法》44 条）
+- 解除经济补偿（《劳动合同法》47 条）
+- 双倍工资（未签书面劳动合同满 1 个月，《劳动合同法》82 条）
+
+### 3.2 知识产权归属分析（中国法下最敏感）
+
+中国法下职务作品 / 委托作品 / 一般作品的归属规则**完全不同**，必须精确适用：
+
+**评估要点：**
+- 本合同属于"**职务作品**"（《著作权法》18 条）还是"**委托作品**"（《著作权法》19 条）？
+  - 职务作品：原则上**著作权归作者（员工本人）**，但单位有 2 年内优先使用权；**特殊职务作品**（主要利用单位物质技术条件且约定）才由单位享有除署名权外的所有权
+  - 委托作品：约定优先；**未约定的，著作权归受托人（承揽人）**——这与英美法 work-for-hire 完全相反
+- 是否包含 **IP 转让条款**？转让范围是什么？
+- 是 **全部转让**（一切创作）还是 **限定转让**（仅最终交付物）？
+- 承揽人是否 **保留** 任何权利？（作品集展示权、衍生作品、既有 IP）
+- 对预先存在的工具、框架或方法论是否有 **回授许可**（license-back）？
+- **源代码** 是否包含或排除在转让范围内？
+- IP 转让是否 **以全款支付为条件**？（应当以付款为条件——付款前 IP 不应转让）
+
+**风险标志：**
+- 🔴 "包括草稿、概念、未采用创意在内的所有工作产品均归甲方所有" — 范围过宽
+- 🔴 "承揽人转让全部 IP 含既有 IP" — 既有 IP **绝不应**被转让
+- 🔴 IP 在全款支付前即转让
+- 🟡 对依《著作权法》19 条本应归承揽人的作品做"职务作品"误标
+- 🟢 IP 仅在全款支付后转让，承揽人保留作品集权利与既有 IP
+
+### 3.3 付款条件分析
+
+| 检查项 | 应有约定 | 缺失或不利时的风险 |
 |-------|-----------------|--------------------------|
-| **Payment amount** | Is the rate clearly stated? Fixed, hourly, or milestone-based? | 🔴 |
-| **Payment schedule** | When are invoices due? Net-15? Net-30? Net-60? Net-90? | 🔴 if Net-60+ |
-| **Late payment penalty** | Is there interest on overdue payments? (Standard: 1.5%/month) | 🟡 |
-| **Kill fee** | If client cancels, does freelancer get partial payment? | 🔴 if absent |
-| **Deposit/retainer** | Is upfront payment required before work begins? | 🟡 |
-| **Expense reimbursement** | Are approved expenses reimbursed? Process? | 🟢 |
-| **Payment method** | How is payment made? Wire, check, PayPal, etc.? | 🟢 |
-| **Currency** | Is currency specified? Exchange rate risk? | 🟡 if international |
+| **价款** | 价款明确表述？固定/小时/里程碑？ | 🔴 |
+| **付款周期** | 何时付款？验收后 X 日内？ | 🔴 若超 90 日 |
+| **逾期付款责任** | 是否约定逾期利息？（建议月息 1.5% 或日万分之五） | 🟡 |
+| **首付款 / 进度款** | 开工前是否需要预付款？ | 🟡 |
+| **取消补偿金** | 客户中途取消时承揽人能否获补偿？ | 🔴 若无 |
+| **报销条款** | 经批准的费用是否报销？流程？ | 🟢 |
+| **付款方式** | 何种方式？银行转账/支付宝/微信？ | 🟢 |
+| **币种** | 涉外合同是否明确币种和汇率风险承担？ | 🟡 若涉外 |
+| **开具发票** | 增值税专用发票还是普通发票？由谁承担税费？ | 🟡 |
 
-**Freelancer-Specific Payment Red Flags:**
-- 🔴 **Net-90 or longer** — Freelancers cannot afford to wait 3 months for payment
-- 🔴 **Payment contingent on client's client paying** — "Pay-when-paid" clauses shift risk to freelancer
-- 🔴 **No payment for rejected work** — Client can reject work and pay nothing
-- 🟡 **Net-60** — Long for freelancers; Net-30 or sooner is standard
-- 🟡 **No deposit required** — Freelancer bears all upfront risk
+**中国市场实践提示**：
+- B2B 合同中 **Net-60 至 Net-90 仍属普遍**（尤其大企业、央国企），不必一律视为不可接受
+- 应努力争取的是**付款节点与里程碑挂钩**，而非笼统的"项目完成后"
+- 印花税通常由双方各半承担（《印花税法》），但合同可约定由一方承担
+- 增值税专票一般由收款方开具，价款应明确是"含税价"还是"不含税价"
 
-### 2.4 Kill Fee / Cancellation Terms
+**承揽人特别需警惕的红旗：**
+- 🔴 **"以发包方收到其客户款项为前提付款"**（"背靠背"付款）——风险转嫁，应抵制
+- 🔴 **拒收即不付款** — 客户可任意拒收并拒付
+- 🔴 **没有任何首付款或进度款** — 承揽人承担全部启动现金流风险
+- 🟡 **没有逾期利息约定** — 默认按 LPR 而非合同约定，金额有限
 
-**Evaluate:**
-- If the client terminates before project completion, what does the freelancer receive?
-- Is there a **kill fee** (typically 25-50% of remaining project value)?
-- Are there **cancellation notice requirements**?
-- Does the freelancer keep payment for work already completed?
-- Can the client terminate for convenience or only for cause?
+### 3.4 取消 / 解除补偿条款
 
-**Risk Flags:**
-- 🔴 Client can terminate at any time with no payment for completed work
-- 🔴 No kill fee provision at all
-- 🟡 Kill fee exists but is below 25% of remaining value
-- 🟢 Kill fee of 25-50%, plus payment for all completed work, plus reasonable notice period
+**评估要点：**
+- 客户在项目完成前解除合同，承揽人获得什么？
+- 是否有**任意解除补偿金**（建议为剩余未履行部分的 30-50%）？
+- 是否有**通知期要求**？（30-90 日为宜）
+- 已完成工作的款项是否保留？
+- 客户可任意解除还是仅可因正当事由解除？
 
-### 2.5 Scope Creep Protections
+**风险标志：**
+- 🔴 客户可随时解除而对已完工作不付款
+- 🔴 完全没有解除补偿条款
+- 🟡 有解除补偿但低于剩余未履行部分的 25%
+- 🟢 解除补偿 30-50% + 已完成部分全款 + 合理通知期
 
-**Evaluate:**
-- Is the **scope of work clearly defined** with specific deliverables?
-- Is there a **change order process** for out-of-scope requests?
-- Do change orders require **written approval and revised pricing**?
-- Is there language that prevents the client from adding work without compensation?
+### 3.5 范围蔓延防护
 
-**Risk Flags:**
-- 🔴 Scope defined vaguely ("as needed," "and other duties," "including but not limited to")
-- 🔴 No change order process
-- 🟡 Change order process exists but does not require pricing adjustment
-- 🟢 Clear scope, written change order process, revised pricing for additional work
+**评估要点：**
+- 工作范围是否**清晰定义**且有具体交付物清单？
+- 是否有**变更工单流程**用于范围外请求？
+- 变更工单是否需要**书面同意 + 价格调整**？
+- 是否有防止客户单方加塞工作的语言？
 
-### 2.6 Revision Limits
+**风险标志：**
+- 🔴 范围定义模糊（"按需"、"以及其他工作"、"包括但不限于"）
+- 🔴 无变更工单流程
+- 🟡 有变更工单流程但不要求价格调整
+- 🟢 清晰范围 + 书面变更工单流程 + 价格调整机制
 
-**Evaluate:**
-- How many rounds of revisions are included?
-- What constitutes a "revision" vs. a "new direction"?
-- What is the cost for additional revisions?
-- Is there a time limit for requesting revisions?
+### 3.6 修改次数限制
 
-**Risk Flags:**
-- 🔴 **Unlimited revisions** — The most common freelancer trap
-- 🔴 No definition of what constitutes a revision
-- 🟡 Revisions limited but no additional fee structure
-- 🟢 2-3 rounds included, additional rounds at stated rate, revision window defined
+**评估要点：**
+- 包含多少轮修改？
+- 什么构成"修改" vs 什么构成"新方向"？
+- 超额修改的收费如何？
+- 是否设定提出修改的时间限制？
 
-### 2.7 Non-Compete Analysis
+**风险标志：**
+- 🔴 **无限次修改** — 最常见的承揽人陷阱
+- 🔴 未定义何谓"修改"
+- 🟡 有限制但无超额收费机制
+- 🟢 包含 2-3 轮修改 + 超额按规定收费 + 修改窗口期
 
-**Evaluate:**
-- Does the non-compete exist? What does it restrict?
-- **Duration** — How long? (>1 year is typically excessive for freelancers)
-- **Geographic scope** — How broad? (Nationwide or global is typically excessive)
-- **Activity scope** — What activities are restricted? (Cannot restrict freelancer's core skill)
-- **Compensation** — Is the freelancer compensated for the non-compete period?
+### 3.7 竞业限制分析（**严格区分劳动 vs 商事**）
 
-**Critical Context:** Non-competes are:
-- **Void** in California, Minnesota, Oklahoma, North Dakota
-- **Restricted** in many other states (Colorado, Illinois, Maine, Maryland, etc.)
-- **Under FTC scrutiny** — Federal ban proposed (check current status)
-- Generally **harder to enforce** against independent contractors than employees
+**根据第二阶段的关系定性，适用不同规则：**
 
-**Risk Flags:**
-- 🔴 Non-compete >12 months, broad geographic scope, covers freelancer's primary skill
-- 🔴 Non-compete with no additional compensation
-- 🔴 Non-compete in a state where it may be unenforceable (flag this!)
-- 🟡 Non-compete 6-12 months with reasonable scope
-- 🟢 No non-compete, or narrowly tailored non-solicit only
+**情况 A：如认定为劳动关系**
+- 依据《劳动合同法》23-24 条：
+  - 仅对"高级管理人员、高级技术人员和其他负有保密义务的人员"有效
+  - 期限**不得超过 2 年**
+  - 必须按月支付经济补偿（最高人民法院《劳动争议司法解释（一）》36 条，按解除前 12 个月平均工资的 30%）
+  - 未约定补偿金或未支付的，竞业限制对劳动者**不生效**
 
-### 2.8 Non-Solicit Analysis
+**情况 B：如属承揽 / 商事合作关系**
+- 适用《民法典》合同编一般原则
+- **没有 2 年的法定上限**，但应当合理（实务中法院通常认可 1-3 年）
+- **是否必须给予补偿不是强制性要求**，但建议有对价以增强可执行性
+- 范围限制必须明确（地域、行业、客户名单）
 
-**Evaluate separately from non-compete:**
-- Does it prevent soliciting the client's customers/clients?
-- Does it prevent soliciting the client's employees?
-- Duration and scope?
-- Is it mutual? (It should be — client should not poach freelancer's subcontractors either)
+**情况 C：如属对董监高（《公司法》141-142 条）**
+- 任职期间内的竞业禁止有法定规则
+- 离职后的竞业限制按合同约定
 
-### 2.9 Confidentiality Scope
+**通用风险标志：**
+- 🔴 范围"全国"或"全球"且无明确同业定义 — 范围过宽难以执行
+- 🔴 涉及承揽人核心生存技能 — 可能因违反《宪法》劳动权保障被认定无效
+- 🟡 期限 6-12 个月、范围明确 — 合理
+- 🟢 无竞业限制，或仅约定不挖角既有客户/员工
 
-**Evaluate:**
-- Is the definition of "Confidential Information" reasonable or overly broad?
-- Does it exclude information that is publicly available, independently developed, or already known?
-- Duration of confidentiality obligations?
-- Does it prevent the freelancer from discussing the engagement at all (even its existence)?
+### 3.8 不挖角条款分析
 
-**Risk Flags:**
-- 🔴 "All information related to Client's business" — Too broad, everything becomes confidential
-- 🔴 Cannot even mention working with the client (prevents portfolio use)
-- 🟡 Reasonable definition but no standard exclusions
-- 🟢 Standard confidentiality with clear exclusions and reasonable duration (2-5 years)
+**与竞业限制分别评估：**
+- 是否禁止挖客户？挖员工？
+- 期限和范围？
+- 是否对等？（应对等——客户也不应挖承揽人的分包商）
 
-### 2.10 Liability and Indemnification
+### 3.9 保密范围
 
-**Evaluate:**
-- Is the freelancer's liability capped? At what amount? (Should be capped at fees paid)
-- Does the freelancer indemnify the client? For what?
-- Is indemnification mutual or one-sided?
-- Are consequential damages excluded?
-- Is there a requirement for professional liability (E&O) insurance?
+**中国法适用要点**：商业秘密的法律保护来自《反不正当竞争法》第 9 条 + 《民法典》501 条缔约保密义务。
 
-**Risk Flags:**
-- 🔴 Unlimited freelancer liability
-- 🔴 One-sided indemnification (freelancer indemnifies client but not vice versa)
-- 🔴 Freelancer liable for client's lost profits
-- 🟡 Liability capped but at a high multiple of fees
-- 🟢 Liability capped at fees paid, mutual indemnification, consequential damages excluded
+**评估要点：**
+- "保密信息"的定义是否合理？还是过于宽泛？
+- 是否排除以下情形：(a) 已公开信息；(b) 接收方独立开发；(c) 接收方在签约前已知悉；(d) 第三方合法披露
+- 保密义务期限？（**商业秘密一般可约定 5-10 年；技术秘密可约定至公开时为止**）
+- 是否禁止承揽人讨论该合作（甚至禁止披露合作存在）？
 
-### 2.11 Portfolio Usage Rights
+**风险标志：**
+- 🔴 "与发包方业务相关的所有信息" — 过宽，一切都成机密
+- 🔴 不能提及与发包方有合作（影响作品集与简历使用）
+- 🟡 定义合理但无标准例外
+- 🟢 标准定义 + 清晰例外 + 合理期限（2-5 年）
 
-**Evaluate:**
-- Can the freelancer display the work in their portfolio?
-- Are there restrictions (timing, approval required, NDA limitations)?
-- Can the freelancer use the work in case studies or marketing?
+### 3.10 责任限额与赔偿义务
 
-**Risk Flags:**
-- 🔴 Explicit prohibition on portfolio use with no exception
-- 🟡 Portfolio use allowed only with prior written approval
-- 🟢 Freelancer retains right to display work in portfolio after publication/launch
+**中国法核心规则**：
+- 《民法典》506 条：**故意或重大过失造成损害的免责条款无效**——这一红线不能突破
+- 《民法典》585 条：违约金过分高于实际损失（一般指超过 30%），法院可调减
+- 一般违约责任以"可预见原则"为限（《民法典》584 条）
 
-### 2.12 Insurance Requirements
+**评估要点：**
+- 承揽人责任是否设上限？金额是多少？（建议上限：已付费用总额，或合同总价款）
+- 承揽人是否对发包方承担赔偿？为什么事项？
+- 赔偿义务是否对等？
+- 是否排除间接损失？（建议明确排除）
+- 是否要求承揽人投保职业责任险？
 
-**Evaluate:**
-- Does the contract require the freelancer to carry insurance?
-- What types? (General liability, professional liability/E&O, cyber liability)
-- What coverage amounts?
-- Are the amounts reasonable for the project scope?
+**风险标志：**
+- 🔴 承揽人责任无上限
+- 🔴 单方赔偿义务（承揽人赔偿发包方但不反向）
+- 🔴 承揽人为发包方利润损失买单
+- 🟡 责任有上限但远超合同价款的倍数
+- 🟢 责任上限为已付费用 / 合同价款，对等赔偿，排除间接损失
 
-**Risk Flags:**
-- 🔴 Requires insurance the freelancer does not have and cannot reasonably obtain
-- 🟡 Insurance required but at standard levels ($1M general liability)
-- 🟢 No insurance required, or reasonable requirements matching project risk
+### 3.11 作品集使用权
 
-### 2.13 Tax Responsibilities
+**评估要点：**
+- 承揽人能否在作品集中展示该作品？
+- 有何限制（时间、是否需事前批准、是否受 NDA 约束）？
+- 能否用于案例研究或营销？
 
-**Evaluate:**
-- Does the contract clearly state the freelancer is responsible for their own taxes?
-- Is there a 1099 reference (US) or equivalent?
-- Does the contract require a W-9 or equivalent tax form?
-- Are there any withholding provisions? (Should NOT be for true independent contractors)
+**风险标志：**
+- 🔴 明示禁止作品集使用且无例外
+- 🟡 仅在事前书面同意下可使用
+- 🟢 作品上线/发布后承揽人保留作品集展示权
 
-### 2.14 Dispute Resolution
+### 3.12 保险义务
 
-**Evaluate:**
-- Is there a dispute resolution mechanism?
-- Arbitration vs. litigation? (Arbitration can be expensive for individual freelancers)
-- Where is the venue? (If freelancer is remote, a distant venue is a disadvantage)
-- Who pays legal fees? (Prevailing party provision is better for freelancers)
+**评估要点：**
+- 合同是否要求承揽人投保？
+- 险种？（综合责任险、职业责任险、网络安全险）
+- 保额？
+- 保额是否与项目规模匹配？
 
-**Risk Flags:**
-- 🔴 Mandatory arbitration with costs borne by freelancer
-- 🔴 Venue in a distant jurisdiction from the freelancer
-- 🟡 Arbitration with shared costs
-- 🟢 Mediation first, then litigation in a neutral or freelancer-friendly venue
+**风险标志：**
+- 🔴 要求承揽人投保其无法获得的险种
+- 🟡 要求标准保额（如综合责任 100 万元以上）
+- 🟢 无保险要求，或要求与项目风险匹配
+
+### 3.13 税务责任
+
+**评估要点：**
+- 合同是否明确承揽人自负税务？（应当如此）
+- 是否提及发票要求（增值税专票/普票）？
+- 是否要求提供税务登记证明？
+- 是否有代扣代缴条款？（**对真正的承揽关系不应有——只有劳动关系才有代扣代缴**）
+- 印花税承担方？（一般双方各半）
+
+**红旗**：
+- 🔴 合同要求发包方对承揽人服务费"代扣代缴个人所得税"——这是**事实劳动关系的强信号**，可能被认定为劳动关系
+
+### 3.14 争议解决
+
+**评估要点：**
+- 是否有争议解决机制？
+- 仲裁 vs 诉讼？（仲裁费用较高，但保密性好；诉讼公开但相对便宜）
+- 仲裁机构选择？（CIETAC、北仲、上仲、地方仲裁委——影响成本与效率）
+- 管辖法院？（约定原告就被告，或合同履行地、签订地等之一——《民事诉讼法》35 条）
+- 律师费由败诉方承担？（建议明确约定）
+
+**风险标志：**
+- 🔴 强制仲裁但费用由承揽人独担
+- 🔴 管辖法院远离承揽人所在地（增加维权成本）
+- 🔴 仲裁条款不明确（如"由仲裁机构仲裁"）——可能因不符合《仲裁法》16 条被认定无效
+- 🟡 仲裁费用共担
+- 🟢 先协商后仲裁/诉讼，管辖在中立或承揽人友好地
 
 ---
 
-## Phase 3: Scoring
+## 第四阶段：评分
 
-### 3.1 Freelancer Fairness Score
+### 4.1 承揽人公平度评分
 
-Score the contract from 0-100 based on how well it protects the freelancer:
+按以下加权对合同保护承揽人的程度评分（0-100 分）：
 
-| Category | Weight | Max Points |
+| 类别 | 权重 | 满分 |
 |----------|--------|-----------|
-| Payment Terms & Kill Fee | 20% | 20 |
-| IP Ownership & Portfolio Rights | 20% | 20 |
-| Scope & Revision Protections | 15% | 15 |
-| Non-Compete / Non-Solicit | 15% | 15 |
-| Liability & Indemnification | 10% | 10 |
-| Misclassification Risk | 10% | 10 |
-| Confidentiality Scope | 5% | 5 |
-| Dispute Resolution | 5% | 5 |
+| 付款条件与解除补偿 | 20% | 20 |
+| 知识产权归属与作品集权利 | 20% | 20 |
+| 范围与修改保护 | 15% | 15 |
+| 竞业限制 / 不挖角 | 15% | 15 |
+| 责任限额与赔偿义务 | 10% | 10 |
+| 关系定性风险 | 10% | 10 |
+| 保密范围 | 5% | 5 |
+| 争议解决 | 5% | 5 |
 
-| Score | Grade | Verdict |
+| 评分 | 等级 | 评定 |
 |-------|-------|---------|
-| 85-100 | A | Freelancer-friendly. Sign with confidence. |
-| 70-84 | B | Mostly fair. Negotiate minor issues. |
-| 55-69 | C | Mixed. Several terms need negotiation. |
-| 40-54 | D | Client-favoring. Significant negotiation needed. |
-| 0-39 | F | Exploitative. Do not sign without major revisions. |
+| 85-100 | A | 对承揽人友好。可放心签署。 |
+| 70-84 | B | 总体公平。仅需就细节谈判。 |
+| 55-69 | C | 喜忧参半。多处条款需谈判。 |
+| 40-54 | D | 偏向发包方。需要大量谈判。 |
+| 0-39 | F | 严重剥削。在重大修改前不要签。 |
 
-### 3.2 Common Freelancer Traps Detected
+### 4.2 检测到的承揽人常见陷阱
 
-Flag each of these if found:
+逐项标记是否发现：
 
-| Trap | Description | Found? |
+| 陷阱 | 描述 | 是否发现 |
 |------|-------------|--------|
-| **Unlimited Revisions** | No cap on revision rounds; freelancer works indefinitely | |
-| **No Kill Fee** | Client can cancel with no compensation for lost opportunity | |
-| **Overly Broad Non-Compete** | Restricts freelancer from working in their field | |
-| **IP Assignment Without Fair Comp** | Blanket IP transfer for below-market rate | |
-| **Net-90+ Payment** | Freelancer waits 3+ months for payment | |
-| **Vague Scope** | Scope is undefined, inviting unlimited requests | |
-| **Pay-When-Paid** | Payment depends on client's client paying | |
-| **One-Sided Indemnification** | Freelancer bears all legal risk | |
-| **No Portfolio Rights** | Cannot showcase work at all | |
-| **Forced Arbitration** | Must arbitrate in distant, expensive venue | |
-| **Pre-Existing IP Grab** | Contract claims ownership of freelancer's prior work/tools | |
-| **Automatic Renewal** | Contract renews without explicit opt-in | |
+| **无限修改** | 修改次数无上限；承揽人无限工作 | |
+| **无解除补偿** | 客户可取消而对失去机会不补偿 | |
+| **过宽竞业限制** | 限制承揽人主营业务 | |
+| **IP 无对价转让** | 低于市价的全部 IP 转让 | |
+| **Net-90+ 付款** | 承揽人等 3+ 月才收到款项 | |
+| **范围模糊** | 范围未定义，邀请无限请求 | |
+| **背靠背付款** | 付款取决于客户的客户付款 | |
+| **单方赔偿** | 承揽人承担全部法律风险 | |
+| **无作品集权** | 完全不能展示作品 | |
+| **远端强制仲裁** | 必须在远端、昂贵地点仲裁 | |
+| **既有 IP 被划走** | 合同声称对承揽人既有作品/工具的所有权 | |
+| **自动续期** | 合同未经明示同意自动续期 | |
+| **代扣代缴个人所得税条款** | 暗示事实劳动关系 | |
+| **公章 / 签字要件不明** | 未明确法定代表人签字 + 公章生效 | |
 
 ---
 
-## Phase 4: Generate Report
+## 第五阶段：生成报告
 
-Output as `FREELANCER-REVIEW-[YYYY-MM-DD].md`.
+输出 `承揽合同审查报告-[承揽人名]-[日期].md`。
 
-### Report Structure
+### 报告结构
 
 ```markdown
-# Freelancer Contract Review
+# 承揽合同审查报告
 
-> ⚠️ LEGAL DISCLAIMER: This analysis is AI-generated and does not constitute legal advice. Always consult a licensed attorney before signing any contract.
-
----
-
-## Freelancer Fairness Score: [SCORE]/100 — Grade: [LETTER]
-
-**Verdict:** [one-line verdict from scoring table]
+> ⚠️ 法律免责声明：本分析由 AI 生成，不构成正式法律意见。本输出**不得直接用作正式法律意见书**。律师采用前必须：① 核对每一条法律引用；② 结合个案事实判断；③ 署名前承担二次审核责任。签署任何合同前请咨询在中国执业的合规律师。
 
 ---
 
-## Contract Overview
+## 法律关系定性
 
-| Field | Value |
+**结论**：本合同被定性为 [劳动关系 / 劳务关系 / 承揽合同关系]
+**适用法律**：[《劳动合同法》/《民法典》合同编 / 等]
+**定性依据**：[根据第二阶段评分表的关键信号]
+
+---
+
+## 承揽人公平度评分: [分数]/100 — 等级: [字母]
+
+**评定:** [一行评定]
+
+---
+
+## 合同概览
+
+| 字段 | 值 |
 |-------|-------|
-| Hiring Party | [name] |
-| Freelancer | [name] |
-| Contract Type | [type] |
-| Project/Scope | [brief description] |
-| Total Value | [amount] |
-| Payment Terms | [net-X, milestones, etc.] |
-| Duration | [term] |
-| Governing Law | [jurisdiction] |
+| 发包方 | [名称] |
+| 承揽人 | [名称] |
+| 合同类型 | [类型] |
+| 项目 / 范围 | [简述] |
+| 合同总额 | [金额] |
+| 付款方式 | [按里程碑 / 月度 / Net-X] |
+| 期限 | [合同期] |
+| 法律适用 | [中华人民共和国法律 / 其他] |
+| 争议管辖 | [仲裁机构 / 法院] |
 
 ---
 
-## ⚠️ Freelancer Traps Detected
+## ⚠️ 发现的承揽人陷阱
 
-[List each trap found with one-line explanation and section reference]
+[逐项列出发现的陷阱，配一行说明和章节引用]
 
-1. 🔴 **[Trap Name]** — [what it means for you] — Section [X.X]
+1. 🔴 **[陷阱名]** — [对你意味着什么] — 第 [X.X] 条
 2. ...
 
 ---
 
-## Freelancer Bill of Rights Checklist
+## 承揽人权利清单
 
-This checklist shows what protections every freelancer should have. Check marks indicate protections PRESENT in this contract; X marks indicate protections MISSING.
+下表显示每位承揽人应当享有的保护。✅ 表示本合同已具备，❌ 表示缺失。
 
-| # | Protection | Status | Details |
+| # | 保护 | 状态 | 详情 |
 |---|-----------|--------|---------|
-| 1 | Clear, specific scope of work | ✅/❌ | [details] |
-| 2 | Fair payment rate for the work | ✅/❌ | [details] |
-| 3 | Payment within 30 days | ✅/❌ | [details] |
-| 4 | Late payment penalties | ✅/❌ | [details] |
-| 5 | Upfront deposit or retainer | ✅/❌ | [details] |
-| 6 | Kill fee if project cancelled | ✅/❌ | [details] |
-| 7 | Defined revision limits | ✅/❌ | [details] |
-| 8 | Change order process for scope creep | ✅/❌ | [details] |
-| 9 | IP transfers only upon full payment | ✅/❌ | [details] |
-| 10 | Pre-existing IP protected | ✅/❌ | [details] |
-| 11 | Portfolio usage rights | ✅/❌ | [details] |
-| 12 | Reasonable non-compete (or none) | ✅/❌ | [details] |
-| 13 | Reasonable confidentiality scope | ✅/❌ | [details] |
-| 14 | Liability capped at fees paid | ✅/❌ | [details] |
-| 15 | Mutual indemnification | ✅/❌ | [details] |
-| 16 | Proper contractor classification | ✅/❌ | [details] |
-| 17 | Freedom to work with other clients | ✅/❌ | [details] |
-| 18 | Reasonable dispute resolution | ✅/❌ | [details] |
-| 19 | Clear termination terms for both sides | ✅/❌ | [details] |
-| 20 | No pay-when-paid clause | ✅/❌ | [details] |
+| 1 | 工作范围清晰、具体 | ✅/❌ | [详情] |
+| 2 | 价款合理 | ✅/❌ | [详情] |
+| 3 | 30 日内付款 | ✅/❌ | [详情] |
+| 4 | 逾期付款利息 | ✅/❌ | [详情] |
+| 5 | 预付款 / 进度款 | ✅/❌ | [详情] |
+| 6 | 项目取消有补偿 | ✅/❌ | [详情] |
+| 7 | 明确的修改次数 | ✅/❌ | [详情] |
+| 8 | 变更工单流程 | ✅/❌ | [详情] |
+| 9 | IP 转让以全款支付为条件 | ✅/❌ | [详情] |
+| 10 | 既有 IP 受保护 | ✅/❌ | [详情] |
+| 11 | 作品集使用权 | ✅/❌ | [详情] |
+| 12 | 合理的竞业限制（或无） | ✅/❌ | [详情] |
+| 13 | 合理的保密范围 | ✅/❌ | [详情] |
+| 14 | 责任限额（限于已付费用） | ✅/❌ | [详情] |
+| 15 | 对等赔偿义务 | ✅/❌ | [详情] |
+| 16 | 关系定性清晰（非事实劳动）| ✅/❌ | [详情] |
+| 17 | 自由承接其他客户 | ✅/❌ | [详情] |
+| 18 | 合理争议解决（近端）| ✅/❌ | [详情] |
+| 19 | 双方对等解除条款 | ✅/❌ | [详情] |
+| 20 | 无背靠背付款条款 | ✅/❌ | [详情] |
+| 21 | 公章 + 法定代表人签字生效要件 | ✅/❌ | [详情] |
+| 22 | 送达地址确认条款 | ✅/❌ | [详情] |
 
-**Protections Present:** [X]/20
-**Protections Missing:** [Y]/20
-
----
-
-## Detailed Analysis
-
-### 🔴 High Risk Issues
-
-#### [Issue Title]
-- **Section:** [X.X]
-- **What it says:** [plain English summary of the clause]
-- **Why it's risky for you:** [specific explanation of harm to freelancer]
-- **What you could lose:** [quantified impact — money, rights, opportunity]
-- **What to ask for instead:** [specific alternative language to propose]
-
-[Repeat for each high-risk issue]
-
-### 🟡 Medium Risk Issues
-
-[Same format]
-
-### 🟢 Acceptable Clauses
-
-[Brief summary of clauses that are fair and standard]
+**已具备保护:** [X]/22
+**缺失保护:** [Y]/22
 
 ---
 
-## Misclassification Risk Assessment
+## 详细分析
 
-**Risk Level:** [🔴 High / 🟡 Medium / 🟢 Low]
+### 🔴 高风险问题
 
-[Table of IRS factors evaluated with findings]
+#### [问题标题]
+- **章节:** [X.X]
+- **条款内容:** [通俗易懂的概括]
+- **为何对你不利:** [对承揽人的具体伤害]
+- **法律依据:** [《XX 法》第 X 条 — "条文摘录（30 字内）"]
+- **你可能损失:** [量化影响——金钱、权利、机会]
+- **建议替代方案:** [具体替代条款，可直接采用]
 
-**Implication:** [If high risk, explain that the freelancer may be entitled to employee benefits and the client may face IRS penalties]
+[对每个高风险问题重复上述格式]
 
----
+### 🟡 中风险问题
 
-## Negotiation Script
+[同上格式]
 
-Here are the exact requests to send back to the client, ranked by priority:
+### 🟢 可接受条款
 
-### Priority 1: [Most Critical Change]
-> "I'd like to propose the following adjustment to Section [X.X]: [specific alternative language]. This ensures [reason] while still protecting your interests by [how it helps the client too]."
-
-### Priority 2: [Second Change]
-> "[specific language]"
-
-### Priority 3: [Third Change]
-> "[specific language]"
-
-[Continue for top 5 negotiation priorities]
+[简述公平、标准的条款]
 
 ---
 
-## Recommended Next Steps
+## 关系定性风险评估
 
-1. [ ] Address the [X] high-risk issues before signing
-2. [ ] Send the negotiation requests above to the client
-3. [ ] Ensure you have the protections in the Freelancer Bill of Rights
-4. [ ] Have a licensed attorney review the final version
-5. [ ] Keep a signed copy for your records
-6. [ ] Set calendar reminders for key dates (payment milestones, renewal/termination)
+**风险等级:** [🔴 高 / 🟡 中 / 🟢 低]
+
+[表格化第二阶段评估结果]
+
+**意味着什么:**
+- 若为高风险（被认定为事实劳动关系）：承揽人可主张补缴社保、加班费、解除补偿等劳动法权利；发包方面临行政处罚和补缴义务。
+- 若为低风险：合同条款按《民法典》合同编承揽章节分析。
+
+---
+
+## 谈判脚本
+
+按优先级排序的具体修改请求：
+
+### 优先级 1：[最关键的变更]
+> "我们建议对第 [X.X] 条作如下调整：[具体替代条款]。这既保障了 [理由]，也维护了贵方利益，因为 [对发包方的好处]。"
+
+### 优先级 2：[次要变更]
+> "[具体语言]"
+
+### 优先级 3：[第三变更]
+> "[具体语言]"
+
+[继续列出最重要的 5 项谈判优先级]
+
+---
+
+## 建议后续步骤
+
+1. [ ] 解决 [X] 个高风险问题后再签
+2. [ ] 向发包方发送上述谈判请求
+3. [ ] 确认《承揽人权利清单》中的核心保护到位
+4. [ ] 委托执业律师对最终版本进行复核
+5. [ ] 妥善保管已签署合同副本
+6. [ ] 设置关键日期日历提醒（付款节点、续期/终止）
 ```
 
 ---
 
-## Phase 5: Present to User
+## 第六阶段：呈现给用户
 
-After generating the report:
+生成报告后：
 
-1. Display the **Freelancer Fairness Score** prominently
-2. List the **Freelancer Traps Detected** as a quick summary
-3. Show the **Bill of Rights checklist** score (X/20 protections present)
-4. Show the full report
-5. Ask: "Would you like me to generate specific counter-proposals for the risky clauses? Run `/legal negotiate` to get detailed negotiation language."
-6. Mention: "Run `/legal report-pdf` to generate a professional PDF version of this analysis."
+1. 显眼显示**承揽人公平度评分**
+2. 用快速摘要列出**承揽人陷阱**
+3. 显示**权利清单**得分（X/22 项保护就位）
+4. 显示完整报告
+5. 询问："需要我对风险条款生成具体的修改方案吗？运行 `/legal negotiate` 获取详细谈判语言。"
+6. 提示："运行 `/legal report-pdf` 可生成本分析的专业 PDF 版本。"

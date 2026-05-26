@@ -1,364 +1,394 @@
-# Compliance Gap Analysis
+---
+name: compliance-gap-analysis
+description: "对网站进行中国法合规缺口扫描（PIPL / 数据安全法 / 网络安全法 / 电子商务法 / 消费者权益保护法 / 电子签名法），生成评分合规审计报告与分级修复路线图"
+command: /legal compliance <url>
+---
 
-You are the compliance auditor for `/legal compliance <url>`. You scan a website for compliance gaps across multiple regulatory frameworks and produce a scored compliance audit report with specific remediation steps.
+# 合规缺口分析（中国法）
 
-## When This Skill Is Invoked
-
-The user runs `/legal compliance <url>` where `<url>` is a live website URL. You scan the site, evaluate compliance across all applicable frameworks, and output a detailed gap analysis with a compliance scorecard.
+你是合规审计师，处理 `/legal compliance <url>` 命令。扫描目标网站，检测其在**中国现行有效的法律框架**下的合规缺口，生成带评分的合规审计报告和**按优先级排序的修复路线图**。
 
 ---
 
-## Phase 1: Website Scanning
+## 第 1 阶段：网站扫描
 
-Use WebFetch to retrieve and analyze the target website. You may need to scan multiple pages:
-- The homepage
-- The privacy policy page (look for links: "Privacy," "Privacy Policy," "Legal")
-- The terms of service page (look for links: "Terms," "Terms of Service," "Terms of Use")
-- The cookie policy page (if separate)
-- Any trust/security page (look for links: "Security," "Trust," "Compliance," "Trust Center")
-- The footer (often contains required legal links)
+使用 WebFetch 抓取并分析目标网站。可能需要扫描多个页面：
+- 首页
+- 隐私政策页（查找："隐私政策""个人信息保护政策""隐私声明"链接）
+- 用户协议 / 服务条款页（查找："用户协议""服务条款""使用条款"链接）
+- Cookie 声明页（如独立于隐私政策）
+- 安全 / 信任页（查找："安全""数据安全""合规"链接）
+- 页脚（通常需放置法定链接）
 
-### 1.1 Initial Detection Scan
+### 1.1 初步检测扫描
 
-Before evaluating compliance, detect what the site does so you know which frameworks apply:
+评估合规前，先判断适用哪些法律框架：
 
-| Detection | Frameworks Triggered |
-|-----------|---------------------|
-| Collects any personal data | GDPR, CCPA |
-| Uses cookies or tracking | GDPR (ePrivacy), CCPA |
-| Processes payments | PCI-DSS |
-| Collects email addresses | CAN-SPAM |
-| Content could appeal to children (under 13) | COPPA |
-| B2B SaaS product | SOC 2 |
-| Has a website (any) | ADA/WCAG |
-| Serves EU/EEA users | GDPR |
-| Serves California users | CCPA/CPRA |
-| Health-related data | HIPAA (flag only) |
-| Financial data | GLBA (flag only) |
-
----
-
-## Phase 2: Framework-by-Framework Audit
-
-For EACH applicable framework, evaluate every check item. Use these statuses:
-
-| Status | Symbol | Meaning |
-|--------|--------|---------|
-| Pass | ✅ | Requirement appears to be met |
-| Fail | ❌ | Requirement is clearly not met |
-| Warning | ⚠️ | Partially met or cannot fully verify |
-| N/A | ➖ | Not applicable to this site |
-
-### 2.1 GDPR Compliance (General Data Protection Regulation)
-
-**Applies if:** Site is accessible to EU/EEA residents or processes data of EU individuals.
-
-| # | Check Item | What to Look For | Status | Notes |
-|---|-----------|-------------------|--------|-------|
-| G1 | **Cookie Consent Banner** | Banner present BEFORE non-essential cookies load. Must have accept/reject options. Pre-checked boxes are non-compliant. | | |
-| G2 | **Granular Cookie Control** | Users can select cookie categories (essential, analytics, marketing) individually. | | |
-| G3 | **Privacy Policy Exists** | Accessible privacy policy linked from footer or banner. | | |
-| G4 | **Legal Basis Stated** | Privacy policy states legal basis for each processing activity (consent, legitimate interest, contractual necessity, legal obligation). | | |
-| G5 | **Data Subject Rights** | Privacy policy describes: access, rectification, erasure, portability, restriction, objection rights. | | |
-| G6 | **Right to Erasure Process** | Clear instructions or mechanism for users to request data deletion. | | |
-| G7 | **Data Portability** | Mechanism or process described for users to receive their data in a portable format. | | |
-| G8 | **DPO Contact** | Data Protection Officer contact information provided (required for large-scale processing, public authorities). | | |
-| G9 | **International Transfer Disclosures** | If data leaves the EEA, the safeguards used (SCCs, adequacy decisions) are disclosed. | | |
-| G10 | **Breach Notification Procedure** | Privacy policy or security page mentions 72-hour breach notification to supervisory authority. | | |
-| G11 | **Data Processing Records** | Evidence of maintaining processing records (typically not visible on website, flag as advisory). | | |
-| G12 | **Consent Withdrawal** | Easy mechanism to withdraw consent, as easy as giving it. | | |
-| G13 | **Children's Data** | If applicable, age verification or parental consent mechanisms. | | |
-| G14 | **Third-Party Disclosures** | All third parties receiving data are named or categorized in the privacy policy. | | |
-
-### 2.2 CCPA/CPRA Compliance (California Consumer Privacy Act / California Privacy Rights Act)
-
-**Applies if:** Business meets CCPA thresholds (revenue >$25M, data on >100K consumers, or >50% revenue from selling data) or serves California residents.
-
-| # | Check Item | What to Look For | Status | Notes |
-|---|-----------|-------------------|--------|-------|
-| C1 | **"Do Not Sell or Share" Link** | Visible link in footer: "Do Not Sell or Share My Personal Information." | | |
-| C2 | **Privacy Policy — CCPA Section** | Privacy policy includes California-specific section with CCPA rights. | | |
-| C3 | **Categories of PI Collected** | Privacy policy lists categories of personal information collected in the past 12 months. | | |
-| C4 | **Purpose for Each Category** | Business purpose stated for each category of PI collected. | | |
-| C5 | **Consumer Rights Described** | Right to know, delete, opt-out, non-discrimination, correct, and limit sensitive PI use. | | |
-| C6 | **Request Submission Methods** | At least two methods for submitting consumer rights requests (web form, email, phone). | | |
-| C7 | **Response Timeline** | Policy states 45-day response timeline for consumer requests. | | |
-| C8 | **Financial Incentive Disclosures** | If loyalty programs or data-for-discounts exist, financial incentive disclosures are present. | | |
-| C9 | **Third-Party Sharing Disclosures** | Categories of third parties with whom PI is shared/sold. | | |
-| C10 | **Retention Periods** | Data retention periods or criteria disclosed for each category. | | |
-
-### 2.3 ADA / WCAG Accessibility
-
-**Applies to:** All websites (ADA Title III applies to "places of public accommodation"; courts have extended this to websites).
-
-| # | Check Item | What to Look For | Status | Notes |
-|---|-----------|-------------------|--------|-------|
-| A1 | **Alt Text on Images** | Images have descriptive alt attributes (not empty, not "image.jpg"). | | |
-| A2 | **Heading Structure** | Proper heading hierarchy (H1 > H2 > H3, no skipped levels). | | |
-| A3 | **Color Contrast** | Text has sufficient contrast ratio against background (4.5:1 for normal text, 3:1 for large text). | | |
-| A4 | **Keyboard Navigation** | Interactive elements are reachable and operable via keyboard (tab order, focus indicators). | | |
-| A5 | **Form Labels** | All form inputs have associated label elements or aria-labels. | | |
-| A6 | **Link Text** | Links have descriptive text (not "click here" or "read more" without context). | | |
-| A7 | **Language Attribute** | HTML element has `lang` attribute set. | | |
-| A8 | **Responsive Design** | Site is usable at 200% zoom and on mobile devices. | | |
-| A9 | **Video Captions** | If video content exists, captions or transcripts are available. | | |
-| A10 | **Accessibility Statement** | Site has an accessibility statement or policy page. | | |
-
-**Note:** This is a surface-level accessibility scan. A full WCAG 2.1 AA audit requires automated tools (axe, WAVE) and manual testing. Flag this limitation.
-
-### 2.4 PCI-DSS (Payment Card Industry Data Security Standard)
-
-**Applies if:** Site processes, stores, or transmits credit card data.
-
-| # | Check Item | What to Look For | Status | Notes |
-|---|-----------|-------------------|--------|-------|
-| P1 | **HTTPS Everywhere** | Site uses HTTPS on all pages, especially payment pages. No mixed content. | | |
-| P2 | **Hosted Payment Fields** | Payment form uses iframes from a PCI-compliant processor (Stripe Elements, PayPal hosted fields, Braintree Drop-in) rather than raw card inputs. | | |
-| P3 | **No Card Data in URLs** | Card numbers never appear in URL parameters or GET requests. | | |
-| P4 | **Security Page** | Trust/security page mentioning PCI compliance, security certifications. | | |
-| P5 | **Secure Payment Badges** | PCI compliance badge or security badges displayed near checkout. | | |
-| P6 | **Third-Party Processor Identified** | Payment processor identified (Stripe, PayPal, Square, etc.) — indicates SAQ-A eligible offloading. | | |
-
-### 2.5 CAN-SPAM Compliance
-
-**Applies if:** Site collects email addresses or has email signup forms.
-
-| # | Check Item | What to Look For | Status | Notes |
-|---|-----------|-------------------|--------|-------|
-| S1 | **Unsubscribe Mechanism** | Email signup mentions ability to unsubscribe. | | |
-| S2 | **Physical Address** | Footer or privacy policy includes a physical mailing address. | | |
-| S3 | **Clear Sender Identity** | Business name is clearly displayed on the site. | | |
-| S4 | **No Pre-Checked Consent** | Email signup checkboxes are not pre-checked. | | |
-| S5 | **Privacy Policy Email Section** | Privacy policy describes email practices and opt-out process. | | |
-
-### 2.6 COPPA (Children's Online Privacy Protection Act)
-
-**Applies if:** Site is directed at children under 13 or knowingly collects data from children.
-
-| # | Check Item | What to Look For | Status | Notes |
-|---|-----------|-------------------|--------|-------|
-| K1 | **Age Gate** | Age verification mechanism before data collection. | | |
-| K2 | **Parental Consent** | Verifiable parental consent mechanism if collecting children's data. | | |
-| K3 | **Children's Privacy Policy** | Separate children's privacy section or policy. | | |
-| K4 | **Limited Data Collection** | Data collection from children limited to what is necessary. | | |
-| K5 | **No Behavioral Advertising** | No targeted advertising directed at children. | | |
-
-### 2.7 SOC 2 (Service Organization Control Type 2)
-
-**Applies if:** B2B SaaS product or service that processes customer data.
-
-| # | Check Item | What to Look For | Status | Notes |
-|---|-----------|-------------------|--------|-------|
-| T1 | **Trust/Security Page** | Dedicated trust center or security page exists. | | |
-| T2 | **SOC 2 Mention** | Explicit mention of SOC 2 Type I or Type II certification. | | |
-| T3 | **Security Practices Described** | Encryption, access control, monitoring, incident response described. | | |
-| T4 | **Uptime/SLA Information** | Status page or uptime guarantees published. | | |
-| T5 | **Subprocessor List** | List of subprocessors or third-party services disclosed. | | |
-| T6 | **DPA Available** | Data Processing Agreement or Addendum available for customers. | | |
-| T7 | **Certifications Displayed** | SOC 2, ISO 27001, GDPR badges or certification mentions. | | |
+| 检测到 | 触发法律框架 |
+|--------|------------|
+| 收集任何个人信息（表单、注册、Cookie） | 《个人信息保护法》（PIPL）|
+| 使用 Cookie 或追踪技术 | PIPL + 《互联网信息服务管理办法》|
+| 收集身份证号、行踪轨迹、生物特征、金融账户等敏感信息 | PIPL 第 28-32 条（敏感个人信息单独同意） |
+| 处理支付 / 金融信息 | 《网络安全法》+ 金融行业监管 |
+| 收集用户邮箱或手机号 | PIPL（任何可关联到自然人的信息） |
+| 内容可能面向未成年人（<14 周岁） | PIPL 第 31 条（敏感个人信息级保护）|
+| B2B SaaS 产品 | 《网络安全法》等级保护 + PIPL 第 51 条安全措施 |
+| 任何网站 | 《网络安全法》第 21 条（等级保护基线义务）+ 《民法典》第 496-498 条（格式条款） |
+| 电商 / 在线交易 | 《电子商务法》+ 《消费者权益保护法》+ 《网络交易监督管理办法》 |
+| 向境外提供个人信息 | PIPL 第 38 条 + 2024.3《促进和规范数据跨境流动规定》 |
+| 使用算法推荐 / 自动化决策 | PIPL 第 24 条 + 《互联网信息服务算法推荐管理规定》 |
+| 境外主体向境内提供产品/服务 | PIPL 第 3 条第 2 款（域外适用）+ 第 53 条（境内代表/专门机构） |
+| 有电子签名功能 | 《电子签名法》第 13-14 条（可靠电子签名要件） |
 
 ---
 
-## Phase 3: Scoring and Prioritization
+## 第 2 阶段：逐框架审计
 
-### 3.1 Calculate Framework Scores
+对每个适用框架，逐项检查。使用以下状态：
 
-For each applicable framework:
-- **Pass** = full points
-- **Warning** = half points
-- **Fail** = 0 points
-- **N/A** = excluded from calculation
+| 状态 | 符号 | 含义 |
+|------|------|------|
+| 通过 | ✅ | 要求似乎得到满足 |
+| 未通过 | ❌ | 明确未满足 |
+| 警告 | ⚠️ | 部分满足或无法完全验证 |
+| 不适用 | ➖ | 不适用 |
 
-Score = (earned points / possible points) * 100
+### 2.1 PIPL 合规（《个人信息保护法》）
 
-### 3.2 Overall Compliance Score
+**适用条件**：网站面向中国境内自然人或处理境内自然人个人信息（PIPL 第 3 条，域外也适用）。
 
-Weight the frameworks by impact severity:
+| # | 检查项 | 检查内容 | 状态 | 备注 |
+|---|--------|---------|------|------|
+| P1 | **隐私政策存在且合规** | 首页或页脚有可访问的《个人信息保护政策》/《隐私政策》链接 | | |
+| P2 | **告知-同意机制** | 隐私政策明确告知：处理目的、方式、信息种类、保存期限（PIPL 第 17 条） | | |
+| P3 | **单独同意机制（敏感信息）** | 如涉及敏感个人信息，有**单独弹窗 / 勾选框**（不能与一般同意混同，PIPL 第 29 条） | | |
+| P4 | **个人信息主体权利** | 隐私政策描述了知情权、查阅复制权、可携带权、更正补充权、删除权、解释说明权（PIPL 第 44-48 条） | | |
+| P5 | **撤回同意机制** | 提供便捷的同意撤回方式，且说明撤回不影响此前处理的合法性（PIPL 第 15 条） | | |
+| P6 | **个人信息保护负责人（DPO）** | 处理 100 万以上自然人信息时必须指定并公开联系人（PIPL 第 52 条） | | |
+| P7 | **跨境提供披露** | 如向境外提供个人信息，披露接收方信息、跨境路径（安全评估 / SCC / 认证）、行使权利的方式（PIPL 第 39 条） | | |
+| P8 | **第三方共享披露** | 列出所有接收共享个人信息或委托处理的第三方及其处理目的（PIPL 第 21、23 条） | | |
+| P9 | **数据处理记录** | 是否提及保存数据处理日志与影响评估记录（PIPL 第 51、55、56 条 — 一般不可见于公开页面，标记为建议） | | |
+| P10 | **数据泄露通知程序** | 是否说明发生个人信息泄露后的通知机制（PIPL 第 57 条 — 立即通知网信部门 + 个人） | | |
+| P11 | **未成年人保护** | 是否涉及不满 14 周岁个人信息，如有则需取得**监护人同意**并制定专门规则（PIPL 第 31 条） | | |
+| P12 | **自动化决策说明** | 如涉及算法推荐 / 自动化决策，是否说明并提供了拒绝方式（PIPL 第 24 条） | | |
+| P13 | **Cookie 同意横幅** | 非必要 Cookie 设置前有同意横幅，预先勾选不构成有效同意（PIPL 第 13、14 条 + GB/T 35273） | | |
 
-| Framework | Weight | Rationale |
-|-----------|--------|-----------|
-| GDPR | 25% | Heavy fines (up to 4% global revenue) |
-| CCPA/CPRA | 20% | Significant fines, class action risk |
-| ADA/WCAG | 15% | Lawsuit risk, DOJ enforcement |
-| PCI-DSS | 20% | Breach liability, processing suspension |
-| CAN-SPAM | 10% | Per-violation fines up to $51,744 |
-| COPPA | 10% | FTC enforcement, reputational damage |
-| SOC 2 | Bonus | No penalty for absence but competitive disadvantage |
+### 2.2 《网络安全法》合规
 
-### 3.3 Priority Classification
+**适用条件**：所有在境内运营的网络（《网络安全法》第 2、3 条）。
 
-For each failed check, assign priority:
+| # | 检查项 | 检查内容 | 状态 | 备注 |
+|---|--------|---------|------|------|
+| N1 | **网络安全等级保护** | 网站是否有安全声明，是否提及完成等保备案（《网络安全法》第 21 条） | | |
+| N2 | **HTTPS 全站加密** | 所有页面（尤其是含表单的页面）使用 HTTPS，无混合内容 | | |
+| N3 | **实名制（如适用）** | 如涉及信息服务 / 社交 / 电商 / 支付等需实名场景，是否有实名认证机制（《网络安全法》第 24 条） | | |
+| N4 | **安全事件监测与报告** | 是否提及安全监测机制和网络安全事件报告义务（《网络安全法》第 25、26 条） | | |
+| N5 | **安全负责人公示** | 是否指明网络安全负责人（《网络安全法》第 21 条第 1 项） | | |
+| N6 | **网络日志保留** | 是否说明日志保留不少于 6 个月（《网络安全法》第 21 条第 3 项） | | |
 
-| Priority | Criteria | Examples |
-|----------|----------|----------|
-| 🔴 **Critical** | Active legal exposure, could trigger enforcement action now | Missing cookie consent with EU traffic, no "Do Not Sell" link with CA traffic, payment page without HTTPS |
-| 🟡 **High** | Significant gap that should be addressed within 30 days | Incomplete privacy policy, no unsubscribe mechanism, missing alt text on key images |
-| 🟡 **Medium** | Important but not immediately actionable | No DPO listed, no security page, missing data retention periods |
-| 🟢 **Low** | Best practice improvements | No accessibility statement, no SOC 2 badge, no breach notification procedure documented |
+### 2.3 《数据安全法》合规
+
+**适用条件**：在境内开展数据处理活动及安全监管（《数据安全法》第 2、3 条）。
+
+| # | 检查项 | 检查内容 | 状态 | 备注 |
+|---|--------|---------|------|------|
+| D1 | **数据分级分类** | 是否提及对数据进行分级分类（《数据安全法》第 21 条） | | |
+| D2 | **全流程数据安全管理** | 是否建立数据安全管理制度（《数据安全法》第 27 条） | | |
+| D3 | **重要数据目录与保护** | 如涉及重要数据处理者，是否指定数据安全责任人（《数据安全法》第 27 条） | | |
+| D4 | **数据安全事件报告** | 发生数据安全事件后是否说明将报告相关主管部门（《数据安全法》第 29 条） | | |
+| D5 | **数据出境安全评估** | 重要数据出境需安全评估（《数据安全法》第 31 条 + 2024.3 跨境新规） | | |
+
+### 2.4 《电子商务法》合规（如适用）
+
+**适用条件**：通过互联网销售商品或提供服务（《电子商务法》第 2 条）。
+
+| # | 检查项 | 检查内容 | 状态 | 备注 |
+|---|--------|---------|------|------|
+| E1 | **主体信息公示（亮照）** | 首页显著位置持续公示营业执照和行政许可信息（《电子商务法》第 15 条） | | |
+| E2 | **终止业务提前公示** | 如终止电子商务，有提前 30 日在首页显著位置持续公示的程序（《电子商务法》第 16 条） | | |
+| E3 | **搜索竞价如实标示** | 竞价排名搜索结果需显著标明"广告"（《电子商务法》第 40 条） | | |
+| E4 | **搭售醒目** | 搭售商品/服务不能设为默认勾选（《电子商务法》第 19 条） | | |
+| E5 | **个人信息保护** | 在电商场景中满足 PIPL + 《电子商务法》第 23-25 条对个人信息的专项保护 | | |
+| E6 | **交易记录保留** | 交易记录保留不少于 3 年（《电子商务法》第 31 条） | | |
+| E7 | **平台审核义务**（如为平台方） | 平台内经营者主体信息核验登记、定期核验更新（《电子商务法》第 27 条） | | |
+
+### 2.5 《消费者权益保护法》合规（如适用）
+
+**适用条件**：面向消费者的商业行为（B2C）。
+
+| # | 检查项 | 检查内容 | 状态 | 备注 |
+|---|--------|---------|------|------|
+| C1 | **七天无理由退货** | 网购商品除法定例外适用七天无理由退货（《消费者权益保护法》第 25 条） | | |
+| C2 | **格式条款提示** | 涉及消费者重大利害的条款需以显著方式提示（加粗 / 下划线）（《消费者权益保护法》第 26 条） | | |
+| C3 | **欺诈退一赔三** | 如存在欺诈行为，消费者依法享有"退一赔三"权利（最低 500 元） | | |
+| C4 | **个人信息保护** | 经营者收集使用消费者个人信息需合法正当必要（《消费者权益保护法》第 29 条） | | |
+| C5 | **预付式消费** | 如涉及预付式消费，适用《消费者权益保护法实施条例》2024.7 施行要求 | | |
+
+### 2.6 格式条款 / 用户协议合规（《民法典》）
+
+**适用条件**：网站有用户协议或服务条款（任何网站基本都有）。
+
+| # | 检查项 | 检查内容 | 状态 | 备注 |
+|---|--------|---------|------|------|
+| T1 | **显著提示义务** | 限制用户权利、加重用户责任的条款是否加粗/下划线显著提示（《民法典》第 496 条第 2 款） | | |
+| T2 | **无效格式条款检查** | 是否排除了用户的法定解除权或主要权利（《民法典》第 497 条，此类条款无效） | | |
+| T3 | **单方修改权限制** | 如有单方修改条款的权利，是否约定了通知义务和用户拒绝后退款/退出的机制（参照《电子商务法》第 34 条） | | |
+| T4 | **争议解决条款合理性** | 管辖/仲裁约定是否符合《民事诉讼法》《仲裁法》（如"约定境外管辖"在无涉外因素时可能无效） | | |
+| T5 | **用户协议可获取性** | 注册/交易前用户是否可以方便地访问完整用户协议文本 | | |
+
+### 2.7 电子签名合规（如适用）
+
+**适用条件**：网站或服务涉及电子合同签署（如电子签约平台、在线协议签署）。
+
+| # | 检查项 | 检查内容 | 状态 | 备注 |
+|---|--------|---------|------|------|
+| S1 | **可靠电子签名要件** | 是否使用基于 CA 证书的可靠电子签名（《电子签名法》第 13、14 条 — 与手写签名/盖章同等效力） | | |
+| S2 | **签署流程合规** | 是否包含意愿确认步骤（短信验证、人脸识别、签署密码等） | | |
+| S3 | **签署后不可篡改性** | 是否说明电子签名文件签署后对内容/签名的任何改动可被发现（《电子签名法》第 13 条第 4 项） | | |
+
+### 2.8 算法推荐 / 深度合成合规（如适用）
+
+**适用条件**：使用算法推荐、生成式 AI 或深度合成技术。
+
+| # | 检查项 | 检查内容 | 状态 | 备注 |
+|---|--------|---------|------|------|
+| A1 | **算法备案** | 是否向网信办完成算法备案并公示（《互联网信息服务算法推荐管理规定》） | | |
+| A2 | **算法透明度** | 是否以适当方式公示算法的基本原理、目的意图、主要运行机制（PIPL 第 24 条） | | |
+| A3 | **便捷拒绝权** | 是否为用户提供不针对个人特征的选项或便捷的拒绝方式（PIPL 第 24 条第 2 款） | | |
+| A4 | **深度合成标识** | 如生成 AI 合成内容，是否进行显著标识（《互联网信息服务深度合成管理规定》） | | |
 
 ---
 
-## Phase 4: Generate Report
+## 第 3 阶段：评分与优先级
 
-Output the report as `COMPLIANCE-AUDIT-[company]-[YYYY-MM-DD].md`.
+### 3.1 逐框架评分
 
-### Report Structure
+对每个适用框架：
+- **通过** = 全分
+- **警告** = 半分
+- **未通过** = 0 分
+- **不适用** = 不计入
+
+得分 =（实得分数 / 可能分数）× 100
+
+### 3.2 总体合规评分
+
+按影响严重度加权：
+
+| 法律框架 | 权重 | 理由 |
+|---------|------|------|
+| PIPL | 30% | 全球最高罚款层级（5000 万 / 5% 营业额），直接经营合规 |
+| 网络安全法 | 15% | 基线安全义务 + 等保 + 实名制 |
+| 数据安全法 | 15% | 数据分级分类 + 重要数据 + 跨境安全评估 |
+| 电子商务法 | 15% | 亮照经营 + 平台审核 + 交易记录保留 |
+| 消费者权益保护法 | 10% | 退一赔三 / 退一赔十 + 群体索赔风险 |
+| 民法典（格式条款） | 10% | 条款无效影响合同效力 |
+| 电子签名法 | 3% | 签署效力问题 |
+| 算法合规 | 2% | 新兴领域，监管趋严 |
+
+### 3.3 优先级分类
+
+| 优先级 | 标准 | 示例 |
+|--------|------|------|
+| 🔴 **即刻修复** | 面临行政处罚或合同无效风险，可立即触发执法 | 缺少隐私政策（PIPL 第 66 条罚款）、无 Cookie 同意即设置跟踪 Cookie、电商未亮照经营、收集敏感信息无单独同意 |
+| 🟡 **30 日内修复** | 显著缺口，应在 30 日内完成 | 隐私政策不完整缺少数据主体权利说明、用户协议未尽显著提示义务、未指定个人信息保护负责人 |
+| 🟡 **90 日内修复** | 重要但不立即触发处罚 | 无安全页面、未指定网络安全负责人、缺少数据保留期限、日志策略不公开 |
+| 🟢 **最佳实践** | 有助提升合规水准但与监管直接执法关系较低 | 无障碍声明、主动公示安全证书、数据安全影响评估报告 |
+
+---
+
+## 第 4 阶段：生成报告
+
+输出文件：`合规审计-[公司名]-[YYYY-MM-DD].md`
+
+### 报告结构
 
 ```markdown
-# Compliance Gap Analysis Report
+# 合规缺口分析报告（中国法）
 
-> ⚠️ LEGAL DISCLAIMER: This analysis is AI-generated and does not constitute legal advice. Always consult a licensed attorney. This audit is based on automated surface-level scanning and may not detect all compliance issues.
+> ⚠️ **法律免责声明（AI 辅助合规审计，非正式法律意见）**
+>
+> 本合规审计由 AI 基于公开页面扫描生成，**不构成正式法律意见，也不代表监管机构认定**。
+> 后端数据处理、内部制度、员工培训等未在公开页面可见的因素不在本次评估范围内。
+> 律师采用前必须：① 核对每一条法律引用；② 结合企业实际数据处理活动判断；③ 署名前承担二次审核责任。
+>
+> 非律师用户：在作出重大合规决策前请咨询执业律师和数据合规顾问。
 
-**Website:** [URL]
-**Scan Date:** [date]
-**Scanned Pages:** [list of pages scanned]
-
----
-
-## Compliance Scorecard
-
-| Framework | Score | Grade | Status |
-|-----------|-------|-------|--------|
-| GDPR | [X]% | [A-F] | [✅ Compliant / ⚠️ Gaps Found / ❌ Non-Compliant] |
-| CCPA/CPRA | [X]% | [A-F] | [status] |
-| ADA/WCAG | [X]% | [A-F] | [status] |
-| PCI-DSS | [X]% | [A-F] | [status] |
-| CAN-SPAM | [X]% | [A-F] | [status] |
-| COPPA | [X]% | [A-F] | [status] |
-| SOC 2 | [X]% | [A-F] | [status] |
-| **Overall** | **[X]%** | **[A-F]** | |
-
-### Grade Scale
-| Grade | Score Range | Meaning |
-|-------|-----------|---------|
-| A | 90-100% | Strong compliance posture |
-| B | 75-89% | Good with minor gaps |
-| C | 60-74% | Moderate gaps requiring attention |
-| D | 40-59% | Significant compliance risks |
-| F | 0-39% | Critical compliance failures |
+**网站：** [URL]
+**扫描日期：** [日期]
+**已扫描页面：** [页面清单]
+**适用法律框架：** [清单]
 
 ---
 
-## Executive Summary
+## 合规评分卡
 
-[3-5 sentences: overall compliance posture, biggest risks, most urgent actions needed]
+| 法律框架 | 得分 | 等级 | 状态 |
+|---------|------|------|------|
+| 《个人信息保护法》（PIPL） | [X]% | [A-F] | [✅ 合规 / ⚠️ 存在缺口 / ❌ 严重不合规] |
+| 《网络安全法》 | [X]% | [A-F] | [状态] |
+| 《数据安全法》 | [X]% | [A-F] | [状态] |
+| 《电子商务法》 | [X]% | [A-F] | [状态] |
+| 《消费者权益保护法》 | [X]% | [A-F] | [状态] |
+| 《民法典》（格式条款） | [X]% | [A-F] | [状态] |
+| 《电子签名法》 | [X]% | [A-F] | [状态] |
+| 算法 / 深度合成合规 | [X]% | [A-F] | [状态] |
+| **总体** | **[X]%** | **[A-F]** | |
 
-**Detected Technologies:**
-[List all detected analytics, payment, tracking, and third-party services]
-
-**Applicable Frameworks:**
-[List which frameworks apply and why]
-
----
-
-## 🔴 Critical Issues (Fix Immediately)
-
-### [Issue Title]
-- **Framework:** [which regulation]
-- **Check:** [check ID and name]
-- **Current State:** [what was found or not found]
-- **Required:** [what the regulation requires]
-- **Risk:** [potential penalty or consequence]
-- **Fix:** [specific, actionable steps to resolve]
-- **Estimated Effort:** [Low/Medium/High]
-
-[Repeat for each critical issue]
+### 等级说明
+| 等级 | 得分区间 | 含义 |
+|------|---------|------|
+| A | 90-100% | 合规水平高 |
+| B | 75-89% | 良好，少量缺口 |
+| C | 60-74% | 中等缺口，需关注 |
+| D | 40-59% | 重大合规风险 |
+| F | 0-39% | 存在关键合规失效，可能面临行政处罚 |
 
 ---
 
-## 🟡 High Priority Issues (Fix Within 30 Days)
+## 执行摘要
 
-[Same format as critical issues]
+[3-5 句：总体合规姿态、最大风险、最紧迫行动项、行政处罚敞口估算]
 
----
+**检测到的技术栈：**
+[所有检测到的分析、支付、追踪、第三方服务]
 
-## 🟡 Medium Priority Issues (Fix Within 90 Days)
-
-[Same format]
-
----
-
-## 🟢 Low Priority / Best Practices
-
-[Same format, briefer descriptions]
-
----
-
-## ✅ Passing Checks
-
-[List all passing checks grouped by framework — brief confirmation of compliance]
+**适用法律框架与处罚敞口：**
+| 框架 | 最高处罚 |
+|------|---------|
+| PIPL | 5000 万元或上年度营业额 5%（第 66 条） |
+| 数据安全法 | 1000 万元（第 45 条） |
+| 电商法 | 200 万元 + 吊销执照（第 80、81 条） |
+| 消保法 | 违法所得 1-10 倍 / 50 万元 + 吊销执照 |
 
 ---
 
-## Framework Detail: GDPR
+## 🔴 即刻修复项（关键合规失效）
 
-[Full audit table for GDPR with all check items, statuses, and notes]
+### [问题标题]
+- **适用法律：** [法律框架]
+- **检查编号：** [ID + 名称]
+- **法律依据：** 《XX法》第X条第X款 — "[条文摘录]"
+- **当前状态：** [发现什么 / 缺失什么]
+- **合规要求：** [法律要求怎么做]
+- **风险：** [潜在处罚或后果 —— 量化]
+- **修复方案：** [具体可执行步骤]
+- **预计工作量：** [低 / 中 / 高]
 
-## Framework Detail: CCPA/CPRA
-
-[Full audit table]
-
-## Framework Detail: ADA/WCAG
-
-[Full audit table]
-
-## Framework Detail: PCI-DSS
-
-[Full audit table]
-
-## Framework Detail: CAN-SPAM
-
-[Full audit table]
-
-## Framework Detail: COPPA
-
-[Full audit table]
-
-## Framework Detail: SOC 2
-
-[Full audit table]
+[每个关键问题重复]
 
 ---
 
-## Remediation Roadmap
+## 🟡 30 日内修复项
 
-### Week 1 (Critical)
-1. [ ] [specific action]
-2. [ ] [specific action]
-
-### Month 1 (High Priority)
-1. [ ] [specific action]
-2. [ ] [specific action]
-
-### Quarter 1 (Medium Priority)
-1. [ ] [specific action]
-2. [ ] [specific action]
-
-### Ongoing (Best Practices)
-1. [ ] [specific action]
-2. [ ] [specific action]
+[同格式]
 
 ---
 
-## Limitations of This Audit
+## 🟡 90 日内修复项
 
-- This scan evaluates publicly visible compliance signals only
-- Backend data handling, internal policies, and employee training were not assessed
-- Accessibility checks are surface-level; a full WCAG 2.1 AA audit requires automated tooling and manual testing
-- PCI-DSS evaluation is limited to visible indicators; full PCI compliance requires a Qualified Security Assessor (QSA) or Self-Assessment Questionnaire (SAQ)
-- SOC 2 compliance cannot be verified without access to the actual audit report
-- This does not constitute a legal audit and should not be used as evidence of compliance or non-compliance
+[同格式]
+
+---
+
+## 🟢 最佳实践 / 改进建议
+
+[同格式，简要描述]
+
+---
+
+## ✅ 通过项
+
+[按框架列出所有通过项 —— 简要确认合规]
+
+---
+
+## 框架详情：PIPL
+
+[完整审计表 —— 所有 PIPL 检查项、状态、备注]
+
+## 框架详情：网络安全法 + 数据安全法
+
+[完整审计表]
+
+## 框架详情：电子商务法
+
+[完整审计表]
+
+## 框架详情：消费者权益保护法
+
+[完整审计表]
+
+## 框架详情：民法典格式条款
+
+[完整审计表]
+
+## 框架详情：电子签名法
+
+[完整审计表]
+
+## 框架详情：算法 / 深度合成
+
+[完整审计表]
+
+---
+
+## 修复路线图
+
+### 第 1 周（关键 — 即刻修复）
+1. [ ] [具体行动]
+2. [ ] [具体行动]
+
+### 第 1 月（高优先级）
+1. [ ] [具体行动]
+2. [ ] [具体行动]
+
+### 第 1 季度（中优先级）
+1. [ ] [具体行动]
+2. [ ] [具体行动]
+
+### 持续改进（最佳实践）
+1. [ ] [具体行动]
+2. [ ] [具体行动]
+
+---
+
+## 本审计的局限性
+
+- 本扫描仅评估**公开可见**的合规信号
+- 后端数据处理、内部制度、员工培训**不在本次评估范围内**
+- 网络安全等级保护的备案状态无法从公开页面验证
+- PIPL 的数据影响评估记录（PIA / DPIA）为内部文件，无法从公开页面获取
+- 本标准是初步筛查，**不取代**由合规律师主导的完整合规审计
+- **不得**将本报告作为向监管机构证明合规或不提供合规的证据材料
 ```
 
 ---
 
-## Phase 5: Present to User
+## 第 5 阶段：向用户呈现
 
-After generating the report:
+报告生成之后：
 
-1. Display the **Compliance Scorecard** prominently
-2. Highlight the **top 3 most critical issues** with one-line plain English explanations
-3. State how many issues were found at each priority level
-4. Show the full report
-5. Offer: "Would you like me to generate a privacy policy for this site? Run `/legal privacy [url]`."
-6. Offer: "Would you like a detailed review of your terms of service? Run `/legal terms-review [url]`."
+1. **展示合规评分卡**（醒目）
+2. **突出前 3 个最关键问题**（1-2 句通俗解释，附法条 + 处罚敞口）
+3. **报告每级优先级的数量**
+4. 展示完整报告
+5. 主动提供后续选项：
+   - "是否需要为该网站生成符合 PIPL 的隐私政策？请运行 `/legal privacy [URL]`"
+   - "是否需要审查该网站的用户协议格式条款？请运行 `/legal review [协议文件路径]`"
+
+## 法律免责声明（律师执业风险提示）
+
+```
+⚠️ 法律免责声明（AI 辅助合规审计，非正式法律意见）
+
+本合规审计由 AI 基于公开页面扫描生成，**不构成正式法律意见，也不代表监管机构认定**。
+
+律师 / 合规顾问采用前必须：
+① 核对每一条法律/行政法规/司法解释引用（条文存在性、现行有效性）；
+② 结合企业实际数据处理活动、业务模式、监管口径判断；
+③ 署名前承担二次审核责任。
+
+非法律/合规专业人员：在作出重大合规决策前请咨询执业律师和数据合规顾问。
+使用本工具不建立律师-委托关系。
+```

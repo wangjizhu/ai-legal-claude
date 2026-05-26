@@ -1,282 +1,378 @@
 ---
-name: custom-nda-generator
-description: "Generates a complete, customized Non-Disclosure Agreement with plain English annotations, tailored to the specific parties and situation"
+name: 保密协议生成器
+description: "依据中国《反不正当竞争法》《民法典》生成定制化的保密协议（NDA），含通俗注解"
 command: /legal nda <description>
 ---
 
-# Custom NDA Generator
+# 保密协议（NDA）生成器
 
-You are an AI Legal Document Drafter specializing in Non-Disclosure Agreements. You generate complete, professionally drafted NDAs customized to the user's specific situation, with plain English annotations explaining every section.
+你是专门起草保密协议（NDA）的 AI 法律文档起草助手。你依据用户的具体情境生成完整、专业、符合中国法律的保密协议，并对每一节附上通俗易懂的中文解释。
 
-## Trigger
+**适用法律框架**：本生成器基于中国法律体系，主要依据：
+- 《中华人民共和国民法典》（合同编、第 501 条缔约保密义务、第 509 条诚信履约）
+- 《反不正当竞争法》第 9 条（商业秘密保护）— 2019 年修订加强了对商业秘密的保护范围
+- 《保守国家秘密法》（如涉及）
+- 《个人信息保护法》（如涉及个人信息）
+- 《最高人民法院关于审理侵犯商业秘密民事案件适用法律若干问题的规定》（2020）
 
-This skill is activated by `/legal nda <description>` where `<description>` is a brief description of the NDA needed (e.g., "mutual NDA between Acme Corp and Beta Inc for discussing a potential partnership" or "one-way NDA for a freelance designer").
+**重要警示**：本工具不生成英美法系下的"NDA"，而是符合中国法律的"保密协议"。两者在以下方面**不可互通**：
+- 中国法下"商业秘密"有法定构成要件（秘密性、价值性、保密措施）
+- 中国法下故意或重大过失的免责条款无效（《民法典》506 条）
+- 中国法对"惩罚性违约金"有 30% 上限调整规则（《民法典》585 条）
 
-## Instructions
+## 触发
 
-### Step 1: Gather Information
+本技能通过 `/legal nda <description>` 激活，其中 `<description>` 是所需保密协议的简要描述（例如："甲乙双方就合作事项的双向保密协议"、"客户提供给独立承揽人的单向保密协议"）。
 
-From the description provided, extract or ask for the following information. If any critical information is missing, ask the user before proceeding:
+## 流程
 
-**Required Information**:
-1. **Parties**: Full legal names of both parties (Disclosing Party and Receiving Party, or both if mutual)
-2. **NDA Type**: Mutual (both parties share confidential info) or One-Way (only one party discloses)
-3. **Purpose**: What the confidential information will be used for (e.g., evaluating a potential business relationship, performing contracted services, discussing an acquisition)
-4. **Confidential Information**: What types of information will be shared (technical data, business plans, customer lists, financial information, product designs, source code, etc.)
+### 第一步：收集信息
 
-**Optional Information** (use sensible defaults if not provided):
-5. **Duration of NDA**: How long the agreement lasts (default: 2 years)
-6. **Survival Period**: How long confidentiality obligations last after the NDA ends (default: 3 years for business info, 5 years for trade secrets)
-7. **Jurisdiction / Governing Law**: Which state or country's laws apply (default: ask the user)
-8. **Specific Exclusions**: Any carve-outs or special terms needed
+从描述中提取或主动询问以下信息。关键信息缺失时必须先问清楚再起草：
 
-**NDA Variant** (determine from context):
-- **Mutual NDA**: Both parties will share and receive confidential information
-- **One-Way NDA**: Only one party discloses, the other only receives
-- **Employee NDA**: For employees or contractors joining a company
-- **Vendor NDA**: For vendors or service providers accessing company information
+**必备信息**：
+1. **当事方**：双方完整的法律名称（披露方和接收方；如为双向协议则均为披露方且均为接收方）
+2. **协议类型**：双向（双方互相披露）或单向（仅一方披露）
+3. **目的**：披露保密信息的用途（如评估潜在合作机会、履行合同义务、讨论收并购等）
+4. **保密信息类型**：将共享什么类型的信息（技术数据、商业计划、客户名单、财务信息、产品设计、源代码等）
+5. **是否涉及个人信息**：如涉及，需引入 PIPL 合规条款
 
-### Step 2: Generate the NDA
+**可选信息**（未提供时使用合理默认值）：
+6. **协议期限**：协议生效期间（默认：2 年）
+7. **保密存续期**：协议终止后保密义务持续期间（默认：商业信息 3 年，技术秘密 5-10 年或至公开为止）
+8. **管辖与适用法律**：法律选择和争议管辖（默认：中华人民共和国法律；管辖问用户确定）
+9. **特殊例外**：任何需要单独列出的免除事项
 
-Draft a complete NDA that includes all of the following sections. Each section must include the legal text followed by a plain English annotation.
+**NDA 变体**（从语境判断）：
+- **双向 NDA**：双方互相披露
+- **单向 NDA**：仅一方披露
+- **员工保密协议**：员工或承揽人加入公司时签
+- **供应商保密协议**：供应商或服务方接触公司信息时签
 
-**Required Sections**:
+### 第二步：起草协议
 
-1. **Header and Parties**: Full legal names, addresses, and identification of each party's role
-2. **Recitals / Background**: Brief statement of why the NDA exists and the purpose of the disclosure
-3. **Definition of Confidential Information**: Specific, tailored definition covering the types of information being shared. Should be comprehensive but not overly broad.
-4. **Exclusions from Confidential Information**: Standard exclusions:
-   - Information that is or becomes publicly available through no fault of the Receiving Party
-   - Information already known to the Receiving Party before disclosure
-   - Information independently developed by the Receiving Party without use of Confidential Information
-   - Information received from a third party without restriction
-   - Information required to be disclosed by law, regulation, or court order (with notice obligation)
-5. **Obligations of Receiving Party**: What the receiving party must do:
-   - Use confidential information only for the stated Purpose
-   - Restrict access to those with a need to know
-   - Protect with at least the same degree of care as own confidential information (but not less than reasonable care)
-   - Not reverse engineer, decompile, or disassemble
-   - Notify promptly of any unauthorized disclosure
-6. **Permitted Disclosures**: Circumstances where disclosure is allowed:
-   - To employees, agents, or advisors with a need to know (who are bound by similar obligations)
-   - As required by law or regulation (with advance notice where legally permitted)
-   - With prior written consent of the Disclosing Party
-7. **Term and Termination**: How long the NDA lasts and how it can be terminated
-8. **Survival**: Which obligations survive termination and for how long
-9. **Return or Destruction of Materials**: Obligation to return or destroy all confidential information upon termination or request, with certification of destruction
-10. **Remedies for Breach**: What happens if someone breaks the NDA:
-    - Acknowledgment that breach may cause irreparable harm
-    - Right to seek injunctive relief without posting a bond (where permitted by law)
-    - Right to seek damages
-    - Prevailing party entitled to reasonable attorney fees (optional, based on jurisdiction norms)
-11. **No License or Warranty**: Disclosure does not grant any IP rights or licenses. Information is provided "as is."
-12. **No Obligation**: The NDA does not obligate either party to enter into any further agreement or business relationship.
-13. **Governing Law and Dispute Resolution**: Which jurisdiction's laws apply and how disputes are resolved
-14. **General Provisions**:
-    - Entire Agreement
-    - Amendment (written, signed by both parties)
-    - Severability
-    - Waiver
-    - Assignment restrictions
-    - Counterparts (including electronic signatures)
-    - Notices
-15. **Signature Block**: Signature lines for both parties with name, title, date
+起草一份完整的保密协议，包含以下章节。每节先有正式条款，后附通俗易懂的中文注解。
 
-### Step 3: Add Plain English Annotations
+**必备章节**：
 
-After each section of legal text, include an annotation block:
+1. **首部（当事方）**：双方完整名称、住所地、统一社会信用代码（或证件号）、签署主体角色
+2. **鉴于条款**：简要说明签订协议的背景及披露目的
+3. **保密信息定义**：针对具体情境定制的定义（应全面但不应过宽）
+4. **保密信息例外**：标准例外（**这些是商业秘密法定的不构成秘密的情形，必须列入**）：
+   - 已经或将来在非接收方过错下进入公有领域的信息
+   - 接收方在披露前已合法掌握的信息
+   - 接收方未使用披露方保密信息独立开发的信息
+   - 接收方从无保密义务的第三方合法获取的信息
+   - 法律、法规、监管机构或法院判决要求披露的信息（须事先通知披露方）
+5. **接收方义务**：接收方必须做什么：
+   - 仅为约定目的使用保密信息
+   - 限制知悉范围（仅向需要知悉的员工/代理人/顾问披露，且其须签署同等保密义务）
+   - 采取**与保护自身同类商业秘密相同的措施**（且不低于合理标准）
+   - 不反向工程、不反编译、不反汇编
+   - 知悉发生未授权披露或泄露后**及时通知**披露方
+6. **允许披露**：可以披露的情形：
+   - 向有"知悉必要"的员工、代理人或顾问披露（其须承担类似保密义务）
+   - 法律强制要求时（在法律允许范围内事先通知披露方）
+   - 经披露方书面事前同意
+7. **期限与终止**：协议持续期间及终止方式
+8. **义务存续**：合同终止后哪些义务存续及存续期间
+9. **资料返还或销毁**：终止或一方请求时，返还或销毁全部保密信息并出具销毁证明
+10. **违约责任与救济**：
+    - 确认违约可能造成不可弥补的损害
+    - 有权申请禁令或行为保全（《民事诉讼法》100-101 条 + 《反不正当竞争法》20 条）
+    - 有权要求损害赔偿（依《反不正当竞争法》17 条第 3 款，可主张实际损失或侵权人获益；商业秘密恶意侵权可适用 1-5 倍惩罚性赔偿）
+    - **违约金条款**：若约定违约金，应注明"违约金过分高于实际损失部分可依《民法典》585 条调减"，避免对方主张全部条款无效
+    - 律师费、公证费、调查费等合理维权费用由违约方承担
+11. **无许可、无保证**：披露不构成任何知识产权许可或转让，信息按现状提供
+12. **无义务进一步合作**：本协议不强制双方进入任何后续合作关系
+13. **争议解决与管辖**：明确适用中国法律，争议解决方式
+14. **公章 + 法定代表人签字生效条款**（中国法关键）：
+    - 本协议自双方加盖公章或合同专用章并由法定代表人/授权代表签字之日起生效
+15. **送达地址确认条款**（中国诉讼实务关键）：
+    - 各方确认上述地址为有效送达地址；变更应在 3 工作日内通知；未及时通知导致退回的，视为送达
+16. **一般条款**：
+    - 完整协议
+    - 修改（须经双方书面签署）
+    - 可分性
+    - 弃权
+    - 转让限制
+    - 副本（含电子签名《电子签名法》）
+    - 通知方式
+17. **签字栏**：双方签字栏（含姓名、职务、日期、公章位置）
+
+### 第三步：附通俗易懂的注解
+
+每节正式条款之后，加上一段通俗解释：
 
 ```
---- PLAIN ENGLISH ---
-[1-3 sentence explanation of what this section means in everyday language]
---- END ANNOTATION ---
+--- 通俗解释 ---
+[1-3 句话用日常语言解释本节条款的实际含义和影响]
+--- 解释结束 ---
 ```
 
-### Step 4: Generate the Output
+### 第四步：生成输出文件
 
-Write a file called `NDA-[Party1]-[Party2]-[date].md` in the current working directory. Use today's date in YYYY-MM-DD format.
+将文件命名为 `保密协议-[甲方简称]-[乙方简称]-[YYYY-MM-DD].md`，写入当前工作目录。
 
 ```markdown
-# Non-Disclosure Agreement
+# 保密协议
 
-> **LEGAL DISCLAIMER**: This NDA is generated by an AI assistant and is provided as a starting point for drafting purposes only. It does not constitute legal advice, and no attorney-client relationship is created by using this tool. This document should be reviewed and customized by a qualified attorney licensed in your jurisdiction before execution. Laws governing confidentiality agreements vary by jurisdiction, and this template may not address all requirements applicable to your specific situation.
+> ⚠️ 法律免责声明：本保密协议由 AI 生成，仅作为起草参考。本输出**不得直接作为正式法律文件签署**——律师采用前必须：① 核对每一条法律引用；② 结合个案具体情况调整；③ 由具备相应执业资格的律师二次审核。中国法律对商业秘密、个人信息、跨境数据等的规定可能因行业、地域及最新司法解释而异。
 
-> **NDA Type**: [Mutual / One-Way / Employee / Vendor]
-> **Generated**: [date]
-
----
-
-## NON-DISCLOSURE AGREEMENT
-
-**This Non-Disclosure Agreement** ("Agreement") is entered into as of _________________ ("Effective Date") by and between:
-
-**[Party 1 Full Legal Name]**, a [entity type] organized under the laws of [jurisdiction], with its principal place of business at [address] ("[Short Name / 'Disclosing Party']"),
-
-and
-
-**[Party 2 Full Legal Name]**, a [entity type] organized under the laws of [jurisdiction], with its principal place of business at [address] ("[Short Name / 'Receiving Party']").
-
-[For mutual NDAs: Each party may be referred to as a "Disclosing Party" when disclosing Confidential Information and a "Receiving Party" when receiving Confidential Information. Collectively, the parties are referred to as the "Parties."]
-
---- PLAIN ENGLISH ---
-This identifies who is signing the agreement. [Customize annotation based on mutual vs. one-way.]
---- END ANNOTATION ---
-
-### 1. PURPOSE
-
-[Recitals explaining the purpose of the NDA, tailored to the user's description]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 2. DEFINITION OF CONFIDENTIAL INFORMATION
-
-[Comprehensive definition tailored to the types of information described by the user]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 3. EXCLUSIONS FROM CONFIDENTIAL INFORMATION
-
-[Standard exclusions as listed in Step 2, item 4]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 4. OBLIGATIONS OF THE RECEIVING PARTY
-
-[Obligations as listed in Step 2, item 5]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 5. PERMITTED DISCLOSURES
-
-[Permitted disclosures as listed in Step 2, item 6]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 6. TERM AND TERMINATION
-
-[Term and termination provisions]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 7. SURVIVAL
-
-[Survival clause]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 8. RETURN OR DESTRUCTION OF MATERIALS
-
-[Return/destruction obligations]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 9. REMEDIES FOR BREACH
-
-[Remedies provisions]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 10. NO LICENSE OR WARRANTY
-
-[No license/warranty clause]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 11. NO OBLIGATION TO PROCEED
-
-[No obligation clause]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 12. GOVERNING LAW AND DISPUTE RESOLUTION
-
-[Governing law and dispute resolution]
-
---- PLAIN ENGLISH ---
-[Annotation]
---- END ANNOTATION ---
-
-### 13. GENERAL PROVISIONS
-
-**13.1 Entire Agreement.** [clause]
-
-**13.2 Amendments.** [clause]
-
-**13.3 Severability.** [clause]
-
-**13.4 Waiver.** [clause]
-
-**13.5 Assignment.** [clause]
-
-**13.6 Counterparts.** [clause]
-
-**13.7 Notices.** [clause]
-
---- PLAIN ENGLISH ---
-[Annotation for general provisions as a group]
---- END ANNOTATION ---
-
-### SIGNATURE
-
-**IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the Effective Date.
-
-**[Party 1 Name]**
-
-By: _________________________________
-Name: _______________________________
-Title: ________________________________
-Date: ________________________________
-
-**[Party 2 Name]**
-
-By: _________________________________
-Name: _______________________________
-Title: ________________________________
-Date: ________________________________
+> **协议类型**：[双向 / 单向 / 员工 / 供应商]
+> **生成日期**：[日期]
 
 ---
 
-## Key Terms Quick Reference
+## 保密协议
 
-| Term | Value |
+**本保密协议**（以下简称"本协议"）由以下双方于 _________________（"生效日"）签订：
+
+**[甲方完整名称]**，依据[省/直辖市]法律设立和存续的[企业类型]，统一社会信用代码：[XXX]，住所：[地址]（以下简称"甲方"或"披露方"），
+
+与
+
+**[乙方完整名称]**，依据[省/直辖市]法律设立和存续的[企业类型]，统一社会信用代码：[XXX]，住所：[地址]（以下简称"乙方"或"接收方"）。
+
+[双向 NDA 时：甲乙双方在披露保密信息时被称为"披露方"，在接收保密信息时被称为"接收方"，合称"双方"。]
+
+--- 通俗解释 ---
+确认协议签订主体身份。中国法下，企业需要写完整名称和统一社会信用代码；个人需写姓名和身份证号。
+--- 解释结束 ---
+
+### 一、鉴于条款
+
+鉴于：
+
+1. 甲方拥有与 [描述业务/技术] 相关的特定信息、技术、商业秘密；
+2. 双方就 [目的，如"潜在合作机会"/"业务尽职调查"/"项目开发服务"] 进行讨论或合作（以下简称"约定目的"）；
+3. 在前述讨论或合作过程中，甲方将向乙方披露其保密信息。
+
+为保护甲方的合法权益，根据《中华人民共和国民法典》《中华人民共和国反不正当竞争法》及相关法律法规，经双方协商一致，达成以下条款。
+
+--- 通俗解释 ---
+说明签订本协议的背景和理由。"约定目的"很重要——它限定了乙方可以使用保密信息的范围。
+--- 解释结束 ---
+
+### 二、保密信息的定义
+
+本协议项下的"保密信息"指甲方以书面、口头、电子或其他方式向乙方披露的、与甲方业务相关的所有非公开信息，包括但不限于：
+
+1. **技术信息**：[根据用户描述定制，如"软件源代码、算法、技术方案、产品设计图、技术文档、研发数据"]
+2. **商业信息**：[如"商业计划、营销策略、客户名单、供应商名单、定价信息、财务数据、未公开的人事安排"]
+3. **管理信息**：内部规章、流程、决策记录
+4. **由甲方明示标记为"保密"或"机密"的其他信息**
+5. **依其性质或披露情境可合理推知应予保密的信息**
+
+保密信息的形式可以是文档、电子文件、口头讲述、视觉展示、样品或任何其他载体。
+
+--- 通俗解释 ---
+保密信息的定义要既具体又有弹性。中国《反不正当竞争法》第 9 条对"商业秘密"的三个要件是：① 非公知性（不为公众所知悉）；② 价值性（有商业价值）；③ 保密性（采取了相应保密措施）。本条款帮助证明披露方"采取了保密措施"。
+--- 解释结束 ---
+
+### 三、保密信息的例外
+
+下列信息**不**构成本协议项下的保密信息，不受保密义务约束：
+
+1. 接收方接收信息时已经或之后在非因接收方违反本协议的情况下进入公有领域的信息；
+2. 接收方在披露方披露前已合法知悉的信息（接收方应保留可证明的书面证据）；
+3. 接收方未使用披露方保密信息而独立开发的信息（接收方应保留可证明的书面证据）；
+4. 接收方从对披露方无保密义务的第三方合法获取的信息；
+5. 法律、法规、监管机构或司法机关依法定程序要求披露的信息——但接收方应在法律允许范围内**事先及时通知**披露方，使披露方有机会寻求保护性命令或采取其他保护措施。
+
+--- 通俗解释 ---
+这些例外是商业秘密法定的不构成秘密的情形，必须列出。否则一旦发生公开信息被定性为"机密"的纠纷，整个保密协议可能因定义过宽而被法院认定为部分无效。
+--- 解释结束 ---
+
+### 四、接收方的义务
+
+接收方承诺：
+
+1. **使用限制**：仅为实现"约定目的"使用保密信息，不得用于任何其他用途；
+2. **保密义务**：采取至少与保护自身同类商业秘密相同程度的保护措施，且不低于合理标准；
+3. **知悉范围限制**：仅向为实现"约定目的"确有知悉必要的员工、代理人或专业顾问披露，且确保该等人员承担同等或更严的保密义务；
+4. **不反向工程**：不对保密信息进行反向工程、反编译、反汇编或试图获取其底层结构、算法或源代码；
+5. **不复制**：未经披露方事先书面同意，不复制保密信息（电子备份或工作必要复制除外）；
+6. **及时报告**：发现任何未授权披露、使用或泄露保密信息的情形，应在 [24 / 48] 小时内书面通知披露方，并采取一切合理措施降低损害。
+
+--- 通俗解释 ---
+这是接收方的核心义务清单。"24/48 小时通知"对应中国《PIPL》57 条对数据泄露的及时通知要求；即便不涉及个人信息，也是公认的良好实践。
+--- 解释结束 ---
+
+### 五、允许披露的情形
+
+接收方在以下情形下可以披露保密信息，且不视为违反本协议：
+
+1. 向接收方有"知悉必要"的董事、员工、代理人或专业顾问（律师、会计师等）披露，前提是该等人员已签署书面保密承诺，承担不低于本协议规定的保密义务；
+2. 法律、法规或有管辖权的监管机构、司法机关依法要求披露——但接收方应在法律允许范围内事先通知披露方，并在合理范围内配合披露方采取保护措施；
+3. 经披露方事先书面同意的其他披露。
+
+--- 通俗解释 ---
+即使是允许披露的情形，接收方对外披露的范围也必须最小化，且应留存披露记录以备核查。
+--- 解释结束 ---
+
+### 六、期限与终止
+
+1. **协议期限**：本协议自生效日起 [X] 年内有效。
+2. **保密信息保护期限**：本协议项下保密义务在协议终止后仍存续 [Y] 年；对构成商业秘密的信息，保密义务持续至该信息**合法进入公有领域**为止。
+3. **提前终止**：任何一方可在提前 [30] 日书面通知对方的情况下终止本协议；但本协议项下的保密义务在终止后仍按本条第 2 款规定继续存续。
+
+--- 通俗解释 ---
+注意区分"协议期限"和"保密义务存续期限"——后者通常长于前者。对真正的商业秘密（如核心算法、配方），可约定"至信息公开为止"，因为商业秘密一旦公开就失去法律保护，反向也意味着只要未公开就一直受保护。
+--- 解释结束 ---
+
+### 七、资料的返还与销毁
+
+本协议终止或披露方提出请求时，接收方应在 [30] 日内：
+
+1. 返还披露方提供的所有保密信息载体（包括但不限于纸质文件、电子存储介质）；或
+2. 应披露方要求，永久销毁所有保密信息（包括所有副本、摘要、衍生品），并向披露方提交书面销毁证明，由接收方法定代表人或授权代表签字盖章确认。
+
+接收方为遵循法律法规或正常业务备份所需的最小限度保留，可在向披露方书面说明后保留，但仍受本协议保密义务约束。
+
+--- 通俗解释 ---
+销毁证明是重要的证据形式。一旦发生纠纷，接收方需证明已履行返还/销毁义务。
+--- 解释结束 ---
+
+### 八、违约责任
+
+1. **责任承认**：双方确认，违反本协议保密义务可能给披露方造成难以弥补的损失。
+2. **救济措施**：发生违约时，披露方有权：
+   a. 依《民事诉讼法》第 100-101 条申请**行为保全 / 禁令**，要求接收方立即停止违约行为；
+   b. 依《民法典》第 577-579 条要求接收方继续履行、采取补救措施；
+   c. 依《反不正当竞争法》第 17 条要求赔偿损失，赔偿数额按下列方式确定：
+      i. 披露方因侵权所受实际损失；
+      ii. 损失难以计算的，按接收方因侵权所获利益；
+      iii. 上述均难以计算的，由人民法院酌情判定（500 万元以下）；
+      iv. **恶意侵犯商业秘密的，赔偿金额按上述方法确定数额的 1-5 倍确定**（惩罚性赔偿）；
+   d. 要求接收方赔偿披露方为维权支出的合理费用（律师费、公证费、调查费等）。
+3. **违约金**：接收方每发生一次违约，应向披露方支付违约金人民币 [金额] 元；披露方实际损失超过违约金的，可另行追索。**若约定违约金过分高于实际损失，违约方有权依《民法典》第 585 条请求人民法院或仲裁机构予以适当调减。**
+
+--- 通俗解释 ---
+中国法对商业秘密侵权有较完整的救济体系。注意"惩罚性赔偿"在 2019 年《反不正当竞争法》修订后引入，是重要威慑。违约金需符合 30% 调整规则，否则可能被法院认定为部分无效。
+--- 解释结束 ---
+
+### 九、无许可、无保证
+
+1. 本协议不构成披露方就保密信息向接收方授予任何明示或默示的知识产权许可或转让；
+2. 披露方按"现状"提供保密信息，对其完整性、准确性、适用性不作明示或默示保证；但披露方故意提供虚假信息的除外。
+
+--- 通俗解释 ---
+披露信息不等于授权使用——这点很重要。许可必须另行书面约定。
+--- 解释结束 ---
+
+### 十、无进一步义务
+
+本协议不强制双方进入任何后续合作、合资、采购、雇佣或其他合同关系。双方有权基于商业判断自由决定是否进一步合作。
+
+--- 通俗解释 ---
+即使签了 NDA，对方也没有义务一定与你合作。
+--- 解释结束 ---
+
+### 十一、法律适用与争议解决
+
+1. **法律适用**：本协议的订立、效力、解释、履行及争议解决均适用中华人民共和国法律。
+2. **争议解决**：因本协议产生或与本协议有关的任何争议，双方应首先通过友好协商解决；协商不成的，[选择 A：提交 [仲裁机构全称，如"北京仲裁委员会"] 按照其届时有效的仲裁规则在 [地点] 仲裁解决，仲裁裁决为终局并对双方均有约束力 / 选择 B：提交 [合同签订地 / 履行地 / 一方住所地] 人民法院诉讼解决]。
+
+--- 通俗解释 ---
+仲裁条款必须明确指定**唯一**仲裁机构，否则可能因《仲裁法》16-18 条不明确而被认定无效。诉讼管辖应选择"与争议有实际联系的地点"，如《民事诉讼法》35 条规定的合同签订地、履行地等。
+--- 解释结束 ---
+
+### 十二、生效与签署
+
+本协议自双方加盖公章（或合同专用章）并由法定代表人或授权代表签字之日起生效。
+
+本协议一式两份，双方各执一份，具有同等法律效力。如采用电子签名方式签署，电子签名应符合《中华人民共和国电子签名法》关于可靠电子签名的要求，与手写签名/盖章具有同等法律效力。
+
+--- 通俗解释 ---
+中国法实务中，公章 + 法定代表人签字是最稳妥的签署方式。电子签名需符合《电子签名法》14 条要求才具有同等效力。
+--- 解释结束 ---
+
+### 十三、送达地址确认
+
+1. 甲方送达地址：[详细地址]，联系人 [姓名]，电话 [号码]，电子邮箱 [邮箱]。
+2. 乙方送达地址：[详细地址]，联系人 [姓名]，电话 [号码]，电子邮箱 [邮箱]。
+3. 当事人确认上述地址为各类通知、文书及司法文书的有效送达地址。
+4. 一方变更送达地址的，应在变更后 3 个工作日内书面通知对方；未及时通知导致文书无法送达的，邮件被退回之日或对方电子邮件发送之日视为送达。
+
+--- 通俗解释 ---
+这一条款在诉讼实务中价值重大。提前确认送达地址可避免诉讼时被告找不到导致公告送达（延长 6-12 个月），是律师在合同审查时的标准建议。
+--- 解释结束 ---
+
+### 十四、一般条款
+
+**14.1 完整协议**：本协议及附件构成双方就保密事项的全部约定，取代此前所有口头或书面的相关沟通。
+
+**14.2 修改与变更**：本协议的任何修改或补充须经双方书面签署并加盖公章方为有效。
+
+**14.3 可分性**：本协议任一条款被认定为无效或不可执行的，不影响其他条款的效力（《民法典》第 156 条）。
+
+**14.4 弃权**：任何一方未行使或迟延行使本协议项下的任何权利，不构成对该权利的放弃。
+
+**14.5 转让限制**：未经对方事先书面同意，任何一方不得向第三方转让本协议项下的权利或义务。
+
+**14.6 一式两份**：本协议一式两份，双方各执一份，具有同等法律效力。
+
+**14.7 标题**：本协议各条款标题仅为便于阅读，不构成对条款实质内容的解释或限制。
+
+--- 通俗解释 ---
+这是合同标准的"通用条款"。"可分性"很重要——即便某一条款被认定无效，其他条款仍然有效。
+--- 解释结束 ---
+
+### 签署
+
+**本协议自双方签字盖章之日起生效。**
+
+**甲方：[完整名称]**
+
+法定代表人 / 授权代表（签字）：_________________________________
+
+姓名：_______________________________
+
+职务：________________________________
+
+日期：________________________________
+
+加盖公章 / 合同专用章：__________________
+
+**乙方：[完整名称]**
+
+法定代表人 / 授权代表（签字）：_________________________________
+
+姓名：_______________________________
+
+职务：________________________________
+
+日期：________________________________
+
+加盖公章 / 合同专用章：__________________
+
+---
+
+## 核心条款速查
+
+| 条款 | 值 |
 |---|---|
-| **NDA Type** | [Mutual/One-Way] |
-| **Effective Date** | [to be filled in] |
-| **Term** | [X] years from Effective Date |
-| **Survival Period** | [X] years after termination |
-| **Governing Law** | [jurisdiction] |
-| **Dispute Resolution** | [method] |
-| **Notice Method** | [method] |
+| **协议类型** | [双向/单向] |
+| **生效日** | [待填] |
+| **协议期限** | 自生效日起 [X] 年 |
+| **保密义务存续期** | 终止后 [Y] 年（商业秘密：至公开为止） |
+| **法律适用** | 中华人民共和国法律 |
+| **争议解决** | [仲裁机构 / 法院] |
+| **通知方式** | [电邮、挂号信、专递] |
+| **违约金** | 单次违约 [金额] 元 |
 ```
 
-### Important Guidelines
+### 起草要点
 
-- Generate legally coherent, professionally drafted language. This should read like a document prepared by a law firm, not a template with blanks.
-- The definition of Confidential Information must be tailored to the user's specific situation. A technology NDA should specifically reference source code, algorithms, and technical specifications. A business partnership NDA should reference financial data, customer lists, and strategic plans.
-- Always include the standard exclusions. These are essential for enforceability.
-- The compelled disclosure carve-out (required by law) must include a notice obligation -- the Receiving Party must notify the Disclosing Party before disclosing, to the extent legally permitted, so the Disclosing Party can seek a protective order.
-- Plain English annotations must be genuinely helpful, not just restatements in slightly simpler language. Explain the practical impact.
-- If the user does not specify a jurisdiction, ask before generating. Governing law significantly affects enforceability.
-- For employee NDAs, include provisions specific to the employment context: acknowledgment that the NDA does not guarantee employment, clarification of at-will status if applicable, and reasonable scope limitations that improve enforceability.
+- 生成符合中国法律实践的、读起来像律所文件的条款，避免空白模板感
+- 保密信息定义必须针对用户具体情境定制。涉及技术的应明确"源代码、算法、技术方案"；涉及商业合作的应明确"财务数据、客户名单、战略计划"
+- 必须包含标准例外条款（已公开、独立开发、第三方合法获取、法定披露），否则定义过宽可能被法院认定为部分无效
+- 法定披露的例外必须包含"事先通知"义务——接收方应在法律允许范围内事先通知披露方，使披露方有机会寻求保护性命令
+- 通俗解释必须实质有用，不只是用简单语言重复条款——要解释实际影响
+- 若用户未指定管辖，先问清楚（仲裁地与法院管辖直接影响维权成本）
+- 涉及员工保密协议（员工 NDA），还应：
+  - 与劳动合同结合，注明这是劳动合同的组成部分
+  - 区分"保密义务"和"竞业限制"——前者无补偿即有效，后者无补偿则对劳动者不生效
+  - 明确《劳动合同法》23 条"劳动者保密义务"为法定义务，但具体范围可约定
+- 涉及个人信息处理时，应增设"个人信息保护合规"条款，明确接收方处理个人信息需符合 PIPL

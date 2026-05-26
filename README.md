@@ -10,6 +10,8 @@
 ---
 
 > **分支说明**：本项目 Fork 自 [zubair-trabzada/ai-legal-claude](https://github.com/zubair-trabzada/ai-legal-claude)，并针对 **中华人民共和国法律体系**（民法典、个保法、劳动合同法等）及中文环境（字体支持、语言包）进行了深度本地化改进。
+>
+> **样本说明**：仓库中以 `合同审查报告-*` 命名的历史样本由 P0 修复前的版本生成，含已知错误。详见 [`EXAMPLES.md`](./EXAMPLES.md)。建议用修复后的版本重新生成审查报告。
 
 ---
 
